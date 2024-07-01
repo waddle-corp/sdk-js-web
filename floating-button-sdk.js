@@ -14,7 +14,8 @@ class FloatingButton {
         this.applyCustomStyles(this.button, this.customStyles);
 
         // Button click event
-        this.button.addEventListener('click', () => {
+        this.button.addEventListener('click', (e) => {
+            e.preventDefault();
             alert('floating button clicked!');
             this.openChat();
         });
