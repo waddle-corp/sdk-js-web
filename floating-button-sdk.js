@@ -16,7 +16,7 @@ class FloatingButton {
         // Button click event
         this.button.addEventListener('click', (e) => {
             e.preventDefault(); 
-            console.log('button event');
+            console.log('button event called');
             this.openChat();
         });
 
