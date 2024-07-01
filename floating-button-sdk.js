@@ -30,6 +30,7 @@ class FloatingButton {
     }
 
     openChat() {
+        console.log('openChat');
         const iframeContainer = document.createElement('div');
         iframeContainer.className = 'iframe-container';
 
