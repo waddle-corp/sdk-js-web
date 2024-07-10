@@ -21,9 +21,6 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Build project
-      run: npm run build  # 필요한 경우
-
     - name: Deploy to S3
       uses: jakejarvis/s3-sync-action@v0.5.1
       with:
