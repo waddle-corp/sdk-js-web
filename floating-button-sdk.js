@@ -1,5 +1,3 @@
-
-import './global.css';
 class FloatingButton {
     constructor(clientId, udid = undefined, authCode = undefined) {
         this.clientId = clientId;
