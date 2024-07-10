@@ -5,5 +5,12 @@
   },
   "dependencies": {
     "gh-pages": "^6.1.1"
-  }
+  },
+  "name": "sdk-js-web",
+  "description": "",
+  "version": "1.0.0",
+  "main": "floating-button-sdk.js",
+  "devDependencies": {},
+  "author": "",
+  "license": "ISC"
 }
