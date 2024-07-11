@@ -21,7 +21,7 @@ class FloatingButton {
         this.expandedButton.className = 'expanded-button';
         this.expandedButton.innerText = '테스트 중인 문장입니다';
 
-        this.parent = window.parent.document;
+        this.parent = window.parent.document.getElementsByTagName('body');
         console.log('parent', this.parent.getElementById('root'));
 
         // Button click event
