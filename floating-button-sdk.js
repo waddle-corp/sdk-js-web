@@ -22,7 +22,7 @@ class FloatingButton {
         this.expandedButton.innerText = '테스트 중인 문장입니다';
 
         this.parent = window.parent.document;
-        console.log('parent', this.parent.getElementsByTagName('body').innerHtml);
+        console.log('parent', this.parent.getElementsById('root'));
 
         // Button click event
         this.button.addEventListener('click', (e) => {
