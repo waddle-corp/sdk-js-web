@@ -61,7 +61,20 @@
     bottom: 80px;
     right: 16px;
     width: 90%;
-    height: 600px;
+    height: 100%;
+    background-color: rgba(22, 222, 222, 0.5);
+    z-index: 999;
+    padding: 8px;
+    background: #999;
+    border-radius: 10px;
+}
+
+.iframe-container-shrink {
+    position: fixed;
+    bottom: 80px;
+    right: 16px;
+    width: 90%;
+    height: 400px;
     background-color: rgba(22, 222, 222, 0.5);
     z-index: 999;
     padding: 8px;

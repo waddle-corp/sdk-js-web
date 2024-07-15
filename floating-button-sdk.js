@@ -67,7 +67,8 @@ class FloatingButton {
             e.stopPropagation();
             e.preventDefault();
             console.log(e.target);
-            targetElem.removeChild(iframeContainer); 
+            // targetElem.removeChild(iframeContainer); 
+            iframeContainer.className = 'iframe-container-shrink';
         })
     }
 
