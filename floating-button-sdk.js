@@ -10,7 +10,7 @@ class FloatingButton {
                 console.log(res);
                 this.userId = res;
                 console.log('userId', this.userId);
-                this.chatUrl = `https://demo.gentooai.com/${this.clientId}/${this.userId}`;
+                this.chatUrl = `https://demo.gentooai.com/${this.clientId}/sdk/${this.userId}`;
             });
         console.log('this userId', this.userId);
         // Create floating button
