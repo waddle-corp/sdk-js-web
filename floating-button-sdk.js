@@ -15,14 +15,14 @@ class FloatingButton {
         console.log('this userId', this.userId);
         // Create floating button
         this.button = document.createElement('div');
-        this.button.className = 'floating-button';
+        this.button.className = 'floating-button-common button-image-shrink';
         this.button.type = 'button';
         this.expandedButton = document.createElement('div');
         this.expandedButton.className = 'expanded-button';
-        this.expandedButton.innerText = '테스트 중인 문장입니다';
-
-        this.parent = window.parent.document.getElementsByTagName('body');
-        console.log('parent', this.parent);
+        this.expandedText = document.createElement('p');
+        this.expandedButton.appendChild(this.expandedText);
+        this.expandedText.innerText = '테스트 중인 문장입니다 테스트 중인 문장입니다';
+        this.expandedText.className = 'expanded-text';
 
         // Button click event
         this.button.addEventListener('click', (e) => {
@@ -40,6 +40,7 @@ class FloatingButton {
             this.expandedButton.innerText = '';
             this.expandedButton.style.width = '50px';
             this.expandedButton.style.padding = 0;
+            this.button.className = 'floating-button-common button-image';
         }, [2000])
     }
 
@@ -47,7 +48,7 @@ class FloatingButton {
         e.stopPropagation();
         e.preventDefault();
         console.log('openChat');
-        const targetElem = document.getElementsByClassName('floating-button')[0];
+        const targetElem = document.getElementsByClassName('floating-button-common')[0];
         const iframeContainer = document.createElement('div');
         iframeContainer.className = 'iframe-container';
         const chatHeader = document.createElement('div');

@@ -1,34 +1,59 @@
 /* floating-button-sdk.min.css */
-.floating-button {
+.floating-button-common {
     position: fixed;
     bottom: 80px;
     right: 16px;
-    width: 50px;
-    height: 50px;
-    background-image: url('public/img/units/floating-gentoo.png');
     background-size: contain;
     color: white;
     border: none;
-    /* border-radius: 50%; */
-    /* padding: 15px; */
     cursor: pointer;
     z-index: 1000;
+}
+
+.button-image {
+    width: 54px;
+    height: 54px;
+    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.16);
+    border-radius: 50%;
+    background-image: url('public/img/units/floating-gentoo.png');
+}
+
+.button-image-shrink {
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    background-image: url('public/img/units/floating-gentoo-shrink.png');
 }
 
 .expanded-button {
     position: fixed;
     bottom: 80px;
     right: 16px;
-    width: 250px;
+    width: fit-content;
+    max-width: 300px;
     height: 50px;
     background: #fff;
-    border: #999;
+    border: 1px solid #222;
     border-radius: 795px;
-    padding: 16px;
+    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.16);
+    padding: 16px 24px;
     padding-right: 66px;
     z-index: 999;
+    display: flex;
+    justify-content: center;
 
     transition: all 1s;
+}
+
+.expanded-text {
+    font-family: "pretendard";
+    font-size: 14px;
+    font-weight: 600;
+    color: #222;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1; 
+    -webkit-box-orient: vertical;
 }
 
 .iframe-container {
