@@ -71,16 +71,8 @@ class FloatingButton {
             iframeContainer.className = 'iframe-container';
         })
 
-        iframe.addEventListener('message', (e) => {
-            console.log('iframe called');
-        })
-
-        iframeContainer.addEventListener('message', (e) => {
-            console.log('ifram container called');
-        })
-
         window.addEventListener('message', (e) => {
-            console.log('window called');
+            iframeContainer.className = 'iframe-container';
         })
     }
 
