@@ -70,6 +70,10 @@ class FloatingButton {
             // targetElem.removeChild(iframeContainer); 
             iframeContainer.className = 'iframe-container-shrink';
         })
+
+        iframeContainer.addEventListener('message', (e) => {
+            console.log('ifram container called');
+        })
     }
 
     async handleAuth(udid, authCode) {
