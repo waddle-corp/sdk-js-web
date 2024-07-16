@@ -50,7 +50,7 @@ class FloatingButton {
         console.log('openChat');
         const targetElem = document.getElementsByClassName('floating-button-common')[0];
         const iframeContainer = document.createElement('div');
-        iframeContainer.className = 'iframe-container';
+        iframeContainer.className = 'iframe-container-shrink';
         const chatHeader = document.createElement('div');
         chatHeader.className = 'chat-header';
 
@@ -68,7 +68,7 @@ class FloatingButton {
             e.preventDefault();
             console.log(e.target);
             // targetElem.removeChild(iframeContainer); 
-            iframeContainer.className = 'iframe-container-shrink';
+            iframeContainer.className = 'iframe-container';
         })
 
         iframeContainer.addEventListener('message', (e) => {
