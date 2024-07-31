@@ -163,6 +163,7 @@ class FloatingButton {
     }
 
     updateParameter(props) {
+        console.log('update Parameter called', props);
         this.type = props.type;
         this.fetchFloatingProduct(this.itemId, this.userId, this.type)
             .then(floatingProduct => {
