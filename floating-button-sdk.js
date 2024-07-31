@@ -54,7 +54,7 @@ class FloatingButton {
         this.chatHeader = document.createElement('div');
         this.chatHeader.className = 'chat-header';
         this.chatHandler = document.createElement('img');
-        this.chatHandler.src = '/img/units/sdk-bs-handler.png';
+        this.chatHandler.src = 'public/img/units/sdk-bs-handler.png';
         this.chatHandler.className = 'chat-handler';
         this.chatHeader.appendChild(this.chatHandler);
 
