@@ -1,11 +1,11 @@
 class FloatingButton {
-    constructor(clientId, udid = undefined, authCode = undefined, itemId = '3873', type = 'this') {
+    constructor(props) {
         console.log('input', clientId, udid, authCode, itemId, type);
-        this.clientId = clientId;
-        this.udid = udid;
-        this.authCode = authCode;
-        this.itemId = itemId;
-        this.type = type;
+        this.clientId = props.clientId;
+        this.udid = props.udid;
+        this.authCode = props.authCode;
+        this.itemId = props.itemId || '3873';
+        this.type = props.type || 'this';
         this.userId = '';
         this.floatingComment = [];
         this.floatingProduct = {};
