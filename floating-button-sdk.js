@@ -115,7 +115,7 @@ class FloatingButton {
             if (this.iframeContainer.classList.contains('iframe-container-hide')) {
                 this.button.className = 'floating-button-common button-image';
             }
-        }, [3000])
+        }, [30000])
 
         // Add event listener for the resize event
         window.addEventListener('resize', () => {
