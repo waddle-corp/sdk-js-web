@@ -112,6 +112,8 @@ class FloatingButton {
             this.expandedButton.innerText = '';
             this.expandedButton.style.width = '50px';
             this.expandedButton.style.padding = 0;
+            this.expandedButton.style.border = 'none';
+            this.expandedButton.style.boxShadow = 'none';
             if (this.iframeContainer.classList.contains('iframe-container-hide')) {
                 this.button.className = 'floating-button-common button-image';
             }

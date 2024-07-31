@@ -44,7 +44,7 @@
     right: 16px;
     width: fit-content;
     max-width: 300px;
-    height: 50px;
+    max-height: 50px;
     background: #fff;
     border: 1px solid #222;
     border-radius: 795px;
