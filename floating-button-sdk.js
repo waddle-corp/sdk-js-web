@@ -24,7 +24,7 @@ class FloatingButton {
                 this.fetchFloatingProduct(this.itemId, this.userId, this.type)
                     .then(floatingProduct => {
                         this.floatingProduct = floatingProduct
-                        this.chatUrl = `https://accio-webclient-git-test-sdk-waddle.vercel.app/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
+                        this.chatUrl = `https://accio-webclient-git-test-sdkcdn-waddle.vercel.app/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
                         this.init(this.itemId, this.type, this.chatUrl);
                     });
             }
@@ -117,7 +117,7 @@ class FloatingButton {
             if (this.iframeContainer.classList.contains('iframe-container-hide')) {
                 this.button.className = 'floating-button-common button-image';
             }
-        }, [30000])
+        }, [3000])
 
         // Add event listener for the resize event
         window.addEventListener('resize', () => {
@@ -170,7 +170,7 @@ class FloatingButton {
         this.fetchFloatingProduct(this.itemId, this.userId, this.type)
             .then(floatingProduct => {
                 this.floatingProduct = floatingProduct
-                this.chatUrl = `https://accio-webclient-git-test-sdk-waddle.vercel.app/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
+                this.chatUrl = `https://accio-webclient-git-test-sdkcdn-waddle.vercel.app/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
                 this.init(this.itemId, this.type, this.chatUrl);
                 if (type === 'needs') {this.typeArr.push('needs')}
             });
