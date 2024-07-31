@@ -21,7 +21,7 @@ class FloatingButton {
             this.userId = userId;
             if (floatingComment[0]) {
                 this.floatingComment = floatingComment;
-                this.fetchFloatingProduct(this.itemId, userId, type)
+                this.fetchFloatingProduct(this.itemId, this.userId, this.type)
                     .then(floatingProduct => {
                         this.floatingProduct = floatingProduct
                         this.chatUrl = `https://accio-webclient-git-test-sdk-waddle.vercel.app/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
