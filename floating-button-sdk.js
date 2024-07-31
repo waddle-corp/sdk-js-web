@@ -162,13 +162,13 @@ class FloatingButton {
         }
     }
 
-    updateParameter(itemId, type) {
-        this.type = type;
-        this.fetchFloatingProduct(itemId, this.userId, type)
+    updateParameter(props) {
+        this.type = props.type;
+        this.fetchFloatingProduct(this.itemId, this.userId, this.type)
             .then(floatingProduct => {
                 this.floatingProduct = floatingProduct
                 this.chatUrl = `https://accio-webclient-git-test-sdk-waddle.vercel.app/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
-                this.init(itemId, type, this.chatUrl);
+                this.init(this.itemId, this.type, this.chatUrl);
                 if (type === 'needs') {this.typeArr.push('needs')}
             });
     }
