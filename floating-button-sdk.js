@@ -1,5 +1,6 @@
 class FloatingButton {
     constructor(clientId, udid = undefined, authCode = undefined, itemId = '3873', type = 'this') {
+        console.log('input', clientId, udid, authCode, itemId, type);
         this.clientId = clientId;
         this.udid = udid;
         this.authCode = authCode;
@@ -53,7 +54,7 @@ class FloatingButton {
         this.chatHeader = document.createElement('div');
         this.chatHeader.className = 'chat-header';
         this.chatHandler = document.createElement('img');
-        this.chatHandler.src = 'public/img/units/sdk-bs-handler.png';
+        this.chatHandler.src = '/img/units/sdk-bs-handler.png';
         this.chatHandler.className = 'chat-handler';
         this.chatHeader.appendChild(this.chatHandler);
 
