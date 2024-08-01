@@ -27,6 +27,12 @@
 </head>
 <body>
     <p1>heeellllo</p1>
-    <script src="/floating-button-sdk.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const script = document.createElement('script');
+            script.src = '/floating-button-sdk.js';
+            document.body.appendChild(script);
+        });
+    </script>
 </body>
 </html>
