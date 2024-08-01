@@ -284,6 +284,13 @@ class FloatingButton {
     }
 
     enableChat(iframeContainer, button, expandedButton, dimmedBackground, type) {
+        window.gtag('event', 'iconClicked', {
+            event_category: 'SDKFloatingClicked',
+            event_label: 'User clicked SDK floating button',
+            itemId: this.itemId,
+            clientId: this.clientId,
+            type: type,
+        })
         if (this.isSmallResolution) {
             dimmedBackground.className = 'dimmed-background';
             button.className = 'floating-button-common hide';
