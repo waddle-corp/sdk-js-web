@@ -3,7 +3,7 @@ class FloatingButton {
         this.clientId = props.clientId;
         this.udid = props.udid;
         this.authCode = props.authCode;
-        this.itemId = props.itemId || '3873';
+        this.itemId = props.itemId || '23310';
         this.type = props.type || 'this';
         console.log('input', this.clientId, this.udid, this.authCode, this.itemId, this.type);
         this.userId = '';
@@ -53,8 +53,7 @@ class FloatingButton {
         
         this.chatHeader = document.createElement('div');
         this.chatHeader.className = 'chat-header';
-        this.chatHandler = document.createElement('img');
-        this.chatHandler.src = '/public/img/units/sdk-bs-handler.png';
+        this.chatHandler = document.createElement('div');
         this.chatHandler.className = 'chat-handler';
         this.chatHeader.appendChild(this.chatHandler);
 
@@ -283,22 +282,22 @@ class FloatingButton {
         this.scrollDir = '';
     }
 
-    enableChat(iframeContainer, button, expandedButton, dimmedBackground, type) {
+    enableChat(iframeContainer, button, expandedButton, dimmedBackground, mode) {
         window.gtag('event', 'iconClicked', {
             event_category: 'SDKFloatingClicked',
             event_label: 'User clicked SDK floating button',
             itemId: this.itemId,
             clientId: this.clientId,
-            type: type,
+            type: this.type,
         })
         if (this.isSmallResolution) {
             dimmedBackground.className = 'dimmed-background';
             button.className = 'floating-button-common hide';
             expandedButton.className = 'expanded-button hide';
         }
-        if (type === 'shrink') {
+        if (mode === 'shrink') {
             iframeContainer.className = 'iframe-container-shrink';
-        } else if (type === 'full') {
+        } else if (mode === 'full') {
             iframeContainer.className = 'iframe-container';
             iframeContainer.style.height = '100%';
         } else {

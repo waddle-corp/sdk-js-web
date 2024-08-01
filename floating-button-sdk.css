@@ -157,6 +157,7 @@
 .chat-handler {
     width: 44px;
     height: 4px;
+    background-image: url('/public/img/units/sdk-bs-handler.png');
 }
 
 .hide {
