@@ -38,6 +38,13 @@ class FloatingButton {
     }    
     
     init(itemId, type, chatUrl) {
+        window.gtag('event', 'GentooPopped', {
+            event_category: 'SDKFloatingRendered',
+            event_label: 'SDK floating button is rendered',
+            itemId: this.itemId,
+            clientId: this.clientId,
+            type: this.type,
+        })
         this.remove(this.button, this.expandedButton, this.iframeContainer);
         this.itemId = itemId;
         this.type = type;
