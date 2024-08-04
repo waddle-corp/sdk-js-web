@@ -13,6 +13,12 @@ class FloatingButton {
         this.browserWidth = this.logWindowWidth();
         this.isSmallResolution = this.browserWidth < 601;
         this.typeArr = ['this'];
+        this.hostSrc;
+        if (window.location.hostname === 'dailyshot.co') {
+            this.hostSrc = 'https://demo.gentooai.com';
+        } else {
+            this.hostSrc = 'https://dev-demo.gentooai.com';
+        }
 
         Promise.all([
             this.handleAuth(this.udid, this.authCode),
@@ -24,7 +30,7 @@ class FloatingButton {
                 this.fetchFloatingProduct(this.itemId, this.userId, this.type)
                     .then(floatingProduct => {
                         this.floatingProduct = floatingProduct
-                        this.chatUrl = `https://accio-webclient-git-test-sdkcdn-waddle.vercel.app/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
+                        this.chatUrl = `${this.hostSrc}/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
                         this.init(this.itemId, this.type, this.chatUrl);
                     });
             }
@@ -114,6 +120,20 @@ class FloatingButton {
             }
         });
 
+        this.expandedButton?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            e.preventDefault(); 
+            if (this.iframeContainer.classList.contains('iframe-container-hide')) {
+                this.expandedButton.className = 'expanded-button hide';
+                this.button.className = 'floating-button-common button-image-close';
+                this.openChat(e, this.elems);
+            } else {
+                this.expandedButton.className = 'expanded-button';
+                this.button.className = 'floating-button-common button-image';
+                this.iframeContainer.className = 'iframe-container iframe-container-hide';
+            }
+        });
+
         setTimeout(() => {
             this.expandedButton.innerText = '';
             this.expandedButton.style.width = '50px';
@@ -176,7 +196,7 @@ class FloatingButton {
         this.fetchFloatingProduct(this.itemId, this.userId, this.type)
             .then(floatingProduct => {
                 this.floatingProduct = floatingProduct
-                this.chatUrl = `https://accio-webclient-git-test-sdkcdn-waddle.vercel.app/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
+                this.chatUrl = `${this.hostSrc}/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
                 this.init(this.itemId, this.type, this.chatUrl);
                 if (type === 'needs') {this.typeArr.push('needs')}
             });
