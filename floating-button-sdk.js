@@ -13,6 +13,7 @@ class FloatingButton {
         this.browserWidth = this.logWindowWidth();
         this.isSmallResolution = this.browserWidth < 601;
         this.typeArr = ['this'];
+        this.isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         this.hostSrc;
         if (window.location.hostname === 'dailyshot.co') {
             this.hostSrc = 'https://demo.gentooai.com';
@@ -27,7 +28,7 @@ class FloatingButton {
             this.userId = userId;
             if (floatingComment[0]) {
                 this.floatingComment = floatingComment;
-                this.fetchFloatingProduct(this.itemId, this.userId, this.type)
+                this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
                     .then(floatingProduct => {
                         this.floatingProduct = floatingProduct
                         this.chatUrl = `${this.hostSrc}/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
@@ -168,7 +169,7 @@ class FloatingButton {
             e.stopPropagation();
             e.preventDefault();
             dimmedBackground.className = 'dimmed-background hide';
-            this.hideChat(iframeContainer, button, expandedButton);
+            this.hideChat(iframeContainer, button, expandedButton, dimmedBackground);
         })
 
         window.addEventListener('message', (e) => {
@@ -193,7 +194,7 @@ class FloatingButton {
     updateParameter(props) {
         console.log('update Parameter called', props);
         this.type = props.type;
-        this.fetchFloatingProduct(this.itemId, this.userId, this.type)
+        this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
             .then(floatingProduct => {
                 this.floatingProduct = floatingProduct
                 this.chatUrl = `${this.hostSrc}/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
@@ -253,7 +254,7 @@ class FloatingButton {
         }
     }    
 
-    async fetchFloatingProduct(itemId, userId, target) {
+    async fetchFloatingProduct(itemId, userId, target, isMobileDevice) {
         try {
             const url = 'https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/recommend';
             
@@ -261,6 +262,7 @@ class FloatingButton {
                 itemId: itemId,
                 userId: userId,
                 target: target, // this or needs
+                channelId: isMobileDevice ? 'mobile' : 'web',
             };
 
             const response = await fetch(url, {
