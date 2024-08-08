@@ -240,7 +240,7 @@ class FloatingButton {
     async fetchFloatingComment(itemId) {
         try {
             // URL에 itemId를 포함시켜 GET 요청 보내기
-            const url = `https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/recommend?itemId=${itemId}`;
+            const url = `https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/recommend?itemId=${itemId}?userId=${this.userId}`;
             
             const response = await fetch(url, {
                 method: "GET",
