@@ -20,24 +20,6 @@ class FloatingButton {
         } else {
             this.hostSrc = 'https://dev-demo.gentooai.com';
         }
-
-        // Promise.all([
-        //     this.handleAuth(this.udid, this.authCode),
-        //     this.fetchFloatingComment(this.itemId, this.userId),
-        // ]).then(([userId, floatingComment]) => {
-        //     this.userId = userId;
-        //     if (floatingComment[0]) {
-        //         this.floatingComment = floatingComment;
-        //         this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
-        //             .then(floatingProduct => {
-        //                 this.floatingProduct = floatingProduct
-        //                 this.chatUrl = `${this.hostSrc}/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
-        //                 this.init(this.itemId, this.type, this.chatUrl);
-        //             });
-        //     }
-        // }).catch(error => {
-        //     console.error(`Error while constructing FloatingButton: ${error}`);
-        // })
         
         this.handleAuth(this.udid, this.authCode)
             .then(userId => {
@@ -261,7 +243,8 @@ class FloatingButton {
     async fetchFloatingComment(itemId, userId) {
         try {
             // URL에 itemId를 포함시켜 GET 요청 보내기
-            const url = `https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/recommend?itemId=${itemId}&userId=${userId}`;
+            // const url = `https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/recommend?itemId=${itemId}&userId=${userId}`;
+            const url = `https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/recommend?itemId=385&userId=oca0iSHgMNaBGQsf`;
             
             const response = await fetch(url, {
                 method: "GET",
