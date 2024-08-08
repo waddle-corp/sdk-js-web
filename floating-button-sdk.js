@@ -176,7 +176,9 @@ class FloatingButton {
         })
 
         window.addEventListener('message', (e) => {
-            console.log('e', e);
+            if (e.data.redirectState) {
+                window.location.href=e.data.redirectUrl;
+            }
             if (this.isSmallResolution) {
                 this.enableChat(iframeContainer, button, expandedButton, dimmedBackground, 'full');
             }
