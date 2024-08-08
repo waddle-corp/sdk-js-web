@@ -21,24 +21,45 @@ class FloatingButton {
             this.hostSrc = 'https://dev-demo.gentooai.com';
         }
 
-        Promise.all([
-            this.handleAuth(this.udid, this.authCode),
-            this.fetchFloatingComment(this.itemId, this.userId),
-        ]).then(([userId, floatingComment]) => {
-            this.userId = userId;
-            if (floatingComment[0]) {
-                this.floatingComment = floatingComment;
-                this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
-                    .then(floatingProduct => {
-                        this.floatingProduct = floatingProduct
-                        this.chatUrl = `${this.hostSrc}/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
-                        this.init(this.itemId, this.type, this.chatUrl);
-                    });
-            }
-        }).catch(error => {
-            console.error(`Error while constructing FloatingButton: ${error}`);
-        })
+        // Promise.all([
+        //     this.handleAuth(this.udid, this.authCode),
+        //     this.fetchFloatingComment(this.itemId, this.userId),
+        // ]).then(([userId, floatingComment]) => {
+        //     this.userId = userId;
+        //     if (floatingComment[0]) {
+        //         this.floatingComment = floatingComment;
+        //         this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
+        //             .then(floatingProduct => {
+        //                 this.floatingProduct = floatingProduct
+        //                 this.chatUrl = `${this.hostSrc}/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
+        //                 this.init(this.itemId, this.type, this.chatUrl);
+        //             });
+        //     }
+        // }).catch(error => {
+        //     console.error(`Error while constructing FloatingButton: ${error}`);
+        // })
         
+        this.handleAuth(this.udid, this.authCode)
+            .then(userId => {
+                this.userId = userId;
+                this.fetchFloatingComment(this.itemId, this.userId)
+                    .then(floatingComment => {
+                        if (floatingComment[0]) {
+                            this.floatingComment = floatingComment;
+                            this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
+                                .then(floatingProduct => {
+                                    this.floatingProduct = floatingProduct
+                                    this.chatUrl = `${this.hostSrc}/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
+                                    this.init(this.itemId, this.type, this.chatUrl);
+                                });
+                        }
+                    }).catch(error => {
+                        console.error(`Error while constructing FloatingButton: ${error}`);
+                    })
+            }).catch(error => {
+                console.error(`Error while calling handleAuth func: ${error}`);
+            })
+
         this.prevPosition = null;
         this.scrollPosition = 0;
         this.scrollDir = '';
