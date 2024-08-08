@@ -244,7 +244,7 @@ class FloatingButton {
         try {
             // URL에 itemId를 포함시켜 GET 요청 보내기
             // const url = `https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/recommend?itemId=${itemId}&userId=${userId}`;
-            const url = `https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/recommend?itemId=385&userId=oca0iSHgMNaBGQsf`;
+            const url = `https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/recommend?itemId=432&userId=8H6NNcUdDIzhEu90`;
             
             const response = await fetch(url, {
                 method: "GET",
