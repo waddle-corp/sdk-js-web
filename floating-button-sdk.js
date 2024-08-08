@@ -23,7 +23,7 @@ class FloatingButton {
 
         Promise.all([
             this.handleAuth(this.udid, this.authCode),
-            this.fetchFloatingComment(this.itemId),
+            this.fetchFloatingComment(this.itemId, this.userId),
         ]).then(([userId, floatingComment]) => {
             this.userId = userId;
             if (floatingComment[0]) {
@@ -237,10 +237,10 @@ class FloatingButton {
         }
     }
 
-    async fetchFloatingComment(itemId) {
+    async fetchFloatingComment(itemId, userId) {
         try {
             // URL에 itemId를 포함시켜 GET 요청 보내기
-            const url = `https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/recommend?itemId=${itemId}&userId=${this.userId}`;
+            const url = `https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/recommend?itemId=${itemId}&userId=${userId}`;
             
             const response = await fetch(url, {
                 method: "GET",
