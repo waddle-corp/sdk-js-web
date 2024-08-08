@@ -176,6 +176,7 @@ class FloatingButton {
         })
 
         window.addEventListener('message', (e) => {
+            console.log('e', e);
             if (this.isSmallResolution) {
                 this.enableChat(iframeContainer, button, expandedButton, dimmedBackground, 'full');
             }
