@@ -5,7 +5,6 @@ class FloatingButton {
         this.authCode = props.authCode;
         this.itemId = props.itemId || '23310';
         this.type = props.type || 'this';
-        console.log('input', this.clientId, this.udid, this.authCode, this.itemId, this.type);
         this.userId = '';
         this.floatingComment = [];
         this.floatingProduct = {};
@@ -31,7 +30,6 @@ class FloatingButton {
                         if (floatingComment[0]) {
                             this.floatingComment = floatingComment;
                             this.commentType = floatingComment[2];
-                            console.log('fc', floatingComment, floatingComment.case);
                             this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
                                 .then(floatingProduct => {
                                     this.floatingProduct = floatingProduct
@@ -202,14 +200,13 @@ class FloatingButton {
     }
 
     updateParameter(props) {
-        console.log('update Parameter called', props);
         this.type = props.type;
         this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
             .then(floatingProduct => {
                 this.floatingProduct = floatingProduct
                 this.chatUrl = `${this.hostSrc}/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
                 this.init(this.itemId, this.type, this.chatUrl);
-                if (type === 'needs') {this.typeArr.push('needs')}
+                if (this.type === 'needs') {this.typeArr.push('needs')}
             });
     }
 
@@ -322,7 +319,6 @@ class FloatingButton {
     }
 
     enableChat(iframeContainer, button, expandedButton, dimmedBackground, mode) {
-        console.log('gtag test: ', this.type, this.commentType);
         window.gtag('event', 'iconClicked', {
             event_category: 'SDKFloatingClicked',
             event_label: 'User clicked SDK floating button',
