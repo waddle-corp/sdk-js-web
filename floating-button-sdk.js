@@ -30,7 +30,7 @@ class FloatingButton {
                     .then(floatingComment => {
                         if (floatingComment[0]) {
                             this.floatingComment = floatingComment;
-                            this.commentType = floatingComment.case;
+                            this.commentType = floatingComment[2];
                             console.log('fc', floatingComment, floatingComment.case);
                             this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
                                 .then(floatingProduct => {
@@ -258,7 +258,7 @@ class FloatingButton {
             });
     
             const res = await response.json(); // JSON 형태의 응답 데이터 파싱
-            return [res.this, res.needs];
+            return [res.this, res.needs, res.case];
         } catch (error) {
             console.error(`Error while calling fetchFloatingComment API: ${error}`);
         }
