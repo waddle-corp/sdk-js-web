@@ -17,7 +17,7 @@ class FloatingButton {
         this.domains;
         this.commentType;
         
-        if (window.location.hostname === 'dailyshot.co') {
+        if (window.location.hostname === 'dailyshot.co' || window.location.hostname === 'demo.gentooai.com') {
             this.hostSrc = 'https://demo.gentooai.com';
             this.domains = {
                 auth: 'https://byg7k8r4gi.execute-api.ap-northeast-2.amazonaws.com/prod/auth',
