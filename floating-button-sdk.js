@@ -14,12 +14,21 @@ class FloatingButton {
         this.typeArr = ['this'];
         this.isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         this.hostSrc;
+        this.domains;
         this.commentType;
         
         if (window.location.hostname === 'dailyshot.co') {
             this.hostSrc = 'https://demo.gentooai.com';
+            this.domains = {
+                auth: 'https://byg7k8r4gi.execute-api.ap-northeast-2.amazonaws.com/prod/auth',
+                recommend: 'https://byg7k8r4gi.execute-api.ap-northeast-2.amazonaws.com/prod/recommend',
+            }
         } else {
             this.hostSrc = 'https://dev-demo.gentooai.com';
+            this.domains = {
+                auth: 'https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/auth',
+                recommend: 'https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/recommend',
+            }
         }
         
         this.handleAuth(this.udid, this.authCode)
@@ -225,7 +234,7 @@ class FloatingButton {
         }
         try {
             const response = await fetch(
-                'https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/auth', {
+                this.domains.auth, {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json',
@@ -247,7 +256,7 @@ class FloatingButton {
     async fetchFloatingComment(itemId, userId) {
         try {
             // URL에 itemId를 포함시켜 GET 요청 보내기
-            const url = `https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/recommend?itemId=${itemId}&userId=${userId}`;
+            const url = `${this.domains.recommend}?itemId=${itemId}&userId=${userId}`;
             
             const response = await fetch(url, {
                 method: "GET",
@@ -263,7 +272,7 @@ class FloatingButton {
 
     async fetchFloatingProduct(itemId, userId, target, isMobileDevice) {
         try {
-            const url = 'https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/recommend';
+            const url = this.domains.recommend;
             
             const payload = {
                 itemId: itemId,
