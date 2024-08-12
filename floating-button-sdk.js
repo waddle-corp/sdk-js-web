@@ -15,6 +15,8 @@ class FloatingButton {
         this.typeArr = ['this'];
         this.isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         this.hostSrc;
+        this.commentType;
+        
         if (window.location.hostname === 'dailyshot.co') {
             this.hostSrc = 'https://demo.gentooai.com';
         } else {
@@ -28,6 +30,7 @@ class FloatingButton {
                     .then(floatingComment => {
                         if (floatingComment[0]) {
                             this.floatingComment = floatingComment;
+                            this.commentType = floatingComment.case;
                             this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
                                 .then(floatingProduct => {
                                     this.floatingProduct = floatingProduct
@@ -324,6 +327,7 @@ class FloatingButton {
             itemId: this.itemId,
             clientId: this.clientId,
             type: this.type,
+            commentType: (this.type === 'this' ? this.commentType : ''),
         })
         if (this.isSmallResolution) {
             dimmedBackground.className = 'dimmed-background';
