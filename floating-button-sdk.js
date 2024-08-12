@@ -321,6 +321,7 @@ class FloatingButton {
     }
 
     enableChat(iframeContainer, button, expandedButton, dimmedBackground, mode) {
+        console.log('gtag test: ', this.type, this.commentType);
         window.gtag('event', 'iconClicked', {
             event_category: 'SDKFloatingClicked',
             event_label: 'User clicked SDK floating button',
