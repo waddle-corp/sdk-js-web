@@ -31,6 +31,7 @@ class FloatingButton {
                         if (floatingComment[0]) {
                             this.floatingComment = floatingComment;
                             this.commentType = floatingComment.case;
+                            console.log('fc', floatingComment, floatingComment.case);
                             this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
                                 .then(floatingProduct => {
                                     this.floatingProduct = floatingProduct
