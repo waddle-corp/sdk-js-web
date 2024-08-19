@@ -209,6 +209,7 @@ class FloatingButton {
     }
 
     updateParameter(props) {
+        if (!this.floatingComment) return;
         this.type = props.type;
         this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
             .then(floatingProduct => {

@@ -64,11 +64,8 @@
                         while (ge.q.length) { 
                             var args = ge.q.shift(); 
                             ge.process(args); 
-                        }; 
-                        var sc = document.getElementById('gentoo-sc'); 
-                        if (sc) { 
-                            sc.addEventListener("scroll", handleScroll) 
-                        }; 
+                        };  
+                        w.addEventListener("scroll", () => {handleScroll(w)}) 
                         w.addEventListener("message", ()=>{})
                     }; 
                     var x = document.getElementsByTagName("script")[0]; 
@@ -76,15 +73,17 @@
                         x.parentNode.insertBefore(s, x) 
                     }; 
                 }; 
-                function handleScroll() { 
-                    var sc = document.getElementById('gentoo-sc'); 
-                    var st = sc.scrollTop; 
-                    var dh = sc.scrollHeight - sc.clientHeight; 
-                    var sp = st / dh; 
+                function handleScroll(tn) {  
+                    // console.log('w', tn);
+                    var st = tn.scrollY; 
+                    // var dh = tn.innerHeight; 
+                    var dh = document.getElementById('gentoo-sc').clientHeight;
+                    var sp = st / (dh - tn.innerHeight); 
+                    console.log('st, dh, sp', st, dh, sp, tn.innerHeight);
                     if (sp >= 0.6) { 
                         console.log('sp >= 0.6', st, dh, sp); 
                         ge.process(['update', { type: 'needs' }]); 
-                        sc.removeEventListener('scroll', handleScroll); 
+                        tn.removeEventListener('scroll', handleScroll); 
                     } 
                 }; 
                 if (document.readyState === "complete") { 
@@ -105,12 +104,22 @@
         })
     </script>
     <div>
-        <div
-            id='gentoo-sc' 
-            style="width: 100%; height: 100%; overflow-y: scroll;"
-        >
-            <div style="height: 2000px;">
-                <p>hiiii</p>
+        <div id='gentoo-sc'>
+            <div style="display: flex; flex-direction: column; align-items: stretch; height: 100%;">
+                <div style="width: 100%; height: 400px; background: skyblue;">
+                    box1
+                </div>
+                <div style="display: flex; width: 100%; height: fit-content";>
+                    <div style="flex: 1; height: 300px; background: cornflowerblue;">
+                        box2
+                    </div>
+                    <div style="flex: 1; height: 300px; background: cornsilk;">
+                        box3
+                    </div>
+                </div>
+                <div style="width: 100%; height: 800px; background: skyblue;">
+                    box4
+                </div>
             </div>
         </div>
     </div>
