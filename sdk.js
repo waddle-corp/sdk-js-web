@@ -33,26 +33,23 @@
                 while (ge.q.length) { 
                     var args = ge.q.shift(); 
                     ge.process(args); 
-                }; 
-                var sc = document.getElementById('gentoo-sc'); 
-                if (sc) { 
-                    sc.addEventListener("scroll", handleScroll) 
-                }; 
+                };  
+                var sl = () => {handleScroll(w, sl)}
+                w.addEventListener("scroll", sl) 
+                w.addEventListener("message", ()=>{})
             }; 
             var x = document.getElementsByTagName("script")[0]; 
             if (x.parentNode) { 
                 x.parentNode.insertBefore(s, x) 
             }; 
         }; 
-        function handleScroll() { 
-            var sc = document.getElementById('gentoo-sc'); 
-            var st = sc.scrollTop; 
-            var dh = sc.scrollHeight - sc.clientHeight; 
-            var sp = st / dh; 
+        function handleScroll(tn, sl) {  
+            var st = tn.scrollY; 
+            var dh = document.getElementById('gentoo-sc').clientHeight;
+            var sp = st / (dh - tn.innerHeight); 
             if (sp >= 0.6) { 
-                console.log('sp >= 0.6', st, dh, sp); 
                 ge.process(['update', { type: 'needs' }]); 
-                sc.removeEventListener('scroll', handleScroll); 
+                tn.removeEventListener('scroll', sl); 
             } 
         }; 
         if (document.readyState === "complete") { 
