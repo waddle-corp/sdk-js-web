@@ -209,10 +209,12 @@ class FloatingButton {
     }
 
     updateParameter(props) {
-        if (!this.floatingComment) return;
+        console.log('fc bool', this.floatingComment, !this.floatingComment);
+        // if (!this.floatingComment) return;
         this.type = props.type;
         this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
             .then(floatingProduct => {
+                console.log('fp bool', floatingProduct, !floatingProduct);
                 this.floatingProduct = floatingProduct
                 this.chatUrl = `${this.hostSrc}/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
                 this.init(this.itemId, this.type, this.chatUrl);
