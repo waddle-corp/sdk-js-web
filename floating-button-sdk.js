@@ -209,17 +209,18 @@ class FloatingButton {
     }
 
     updateParameter(props) {
-        console.log('fc bool', this.floatingComment.length === 0, !this.floatingComment?.message);
-        // if (!this.floatingComment) return;
-        this.type = props.type;
-        this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
-            .then(floatingProduct => {
-                console.log('fp bool', !floatingProduct?.message, !floatingProduct?.product);
-                this.floatingProduct = floatingProduct
-                this.chatUrl = `${this.hostSrc}/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
-                this.init(this.itemId, this.type, this.chatUrl);
-                if (this.type === 'needs') {this.typeArr.push('needs')}
-            });
+        if (!this.floatingComment?.message && !this.floatingProduct?.message) {
+            this.type = props.type;
+            this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
+                .then(floatingProduct => {
+                    if (!floatingProduct?.message) {
+                        this.floatingProduct = floatingProduct
+                        this.chatUrl = `${this.hostSrc}/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
+                        this.init(this.itemId, this.type, this.chatUrl);
+                    }
+                })
+        }
+        if (this.type === 'needs') {this.typeArr.push('needs')};
     }
 
     remove() {
