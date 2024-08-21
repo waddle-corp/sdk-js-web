@@ -53,6 +53,7 @@
     padding-right: 56px;
     z-index: 999;
     display: flex;
+    align-items: center;
     justify-content: center;
     cursor: pointer;
 
