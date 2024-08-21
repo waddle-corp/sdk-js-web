@@ -44,7 +44,6 @@
                     ge.q.push(args) 
                 }; 
                 ge.process = function (args) { 
-                    console.log(args);
                     var method = args[0]; 
                     var params = args[1]; 
                     if (method === 'boot') { 
@@ -52,9 +51,7 @@
                     } else if (method === 'update') { 
                         fb.updateParameter(params); 
                     } else if (method === 'unmount') {
-                        console.log('unmount');
-                        delete w.GentooIO;
-                        fb = null;
+                        fb.destroy();
                     }
                 }; 
                 w.GentooIO = ge; 
@@ -68,7 +65,6 @@
                     s.onload = () => { 
                         while (ge.q.length) { 
                             var args = ge.q.shift();
-                            console.log('in while', args); 
                             ge.process(args); 
                         };  
                         var sl = () => {handleScroll(w, sl)}

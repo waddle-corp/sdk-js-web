@@ -19,7 +19,9 @@
                 fb = new w.FloatingButton(params); 
             } else if (method === 'update') { 
                 fb.updateParameter(params); 
-            }; 
+            } else if (method === 'unmount') {
+                fb.destroy();
+            }
         }; 
         w.GentooIO = ge; 
         function l() { 
@@ -31,7 +33,7 @@
             s.src = "/floating-button-sdk.js"; 
             s.onload = () => { 
                 while (ge.q.length) { 
-                    var args = ge.q.shift(); 
+                    var args = ge.q.shift();
                     ge.process(args); 
                 };  
                 var sl = () => {handleScroll(w, sl)}

@@ -16,6 +16,7 @@ class FloatingButton {
         this.hostSrc;
         this.domains;
         this.commentType;
+        this.isDestroyed = false;
         
         if (window.location.hostname === 'dailyshot.co' || window.location.hostname === 'demo.gentooai.com') {
             this.hostSrc = 'https://demo.gentooai.com';
@@ -44,7 +45,7 @@ class FloatingButton {
                                     this.replaceAmpersand(floatingProduct);
                                     this.floatingProduct = floatingProduct;
                                     this.chatUrl = `${this.hostSrc}/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
-                                    this.init(this.itemId, this.type, this.chatUrl);
+                                    if (!this.isDestroyed) this.init(this.itemId, this.type, this.chatUrl);
                                 });
                         }
                     }).catch(error => {
@@ -122,7 +123,7 @@ class FloatingButton {
         }
 
         // Button click event
-        this.button.addEventListener('click', (e) => {
+        var buttonClickHandler = (e) => {
             e.stopPropagation();
             e.preventDefault(); 
             if (this.iframeContainer.classList.contains('iframe-container-hide')) {
@@ -134,9 +135,11 @@ class FloatingButton {
                 this.button.className = 'floating-button-common button-image';
                 this.iframeContainer.className = 'iframe-container iframe-container-hide';
             }
-        });
+        }
 
-        this.expandedButton?.addEventListener('click', (e) => {
+        this.button.addEventListener('click', buttonClickHandler);
+
+        var expandedButtonClickHandler = (e) => {
             e.stopPropagation();
             e.preventDefault(); 
             if (this.iframeContainer.classList.contains('iframe-container-hide')) {
@@ -148,18 +151,22 @@ class FloatingButton {
                 this.button.className = 'floating-button-common button-image';
                 this.iframeContainer.className = 'iframe-container iframe-container-hide';
             }
-        });
+        }
 
-        setTimeout(() => {
-            this.expandedButton.innerText = '';
-            this.expandedButton.style.width = '50px';
-            this.expandedButton.style.padding = 0;
-            this.expandedButton.style.border = 'none';
-            this.expandedButton.style.boxShadow = 'none';
-            if (this.iframeContainer.classList.contains('iframe-container-hide')) {
-                this.button.className = 'floating-button-common button-image';
-            }
-        }, [3000])
+        this.expandedButton?.addEventListener('click', expandedButtonClickHandler);
+
+        if (!this.isDestroyed) {
+            setTimeout(() => {
+                this.expandedButton.innerText = '';
+                this.expandedButton.style.width = '50px';
+                this.expandedButton.style.padding = 0;
+                this.expandedButton.style.border = 'none';
+                this.expandedButton.style.boxShadow = 'none';
+                if (this.iframeContainer.classList.contains('iframe-container-hide')) {
+                    this.button.className = 'floating-button-common button-image';
+                }
+            }, [3000])
+        }
 
         // Add event listener for the resize event
         window.addEventListener('resize', () => {
@@ -226,7 +233,6 @@ class FloatingButton {
     }
 
     remove() {
-        console.log('remove called');
         if (this.button) {document.body.removeChild(this.button)};
         if (this.expandedButton) {document.body.removeChild(this.expandedButton)};
         if (this.iframeContainer) {document.body.removeChild(this.iframeContainer)};
@@ -237,6 +243,15 @@ class FloatingButton {
 
     destroy() {
         console.log('Destroying FloatingButton instance');
+        this.isDestroyed = true;
+        window.removeEventListener('resize', this.handleResize);
+        if (this.button) {
+            this.button.removeEventListener('click', this.buttonClickHandler);
+        }
+    
+        if (this.expandedButton) {
+            this.expandedButton.removeEventListener('click', this.expandedButtonClickHandler);
+        }
         // Remove created DOM elements if they exist
         if (this.button && this.button.parentNode) {
             this.button.parentNode.removeChild(this.button);
@@ -244,11 +259,14 @@ class FloatingButton {
 
         // Reset properties
         this.button = null;
+        this.expandedButton = null;
+        this.iframeContainer = null;
         this.userId = null;
         this.floatingComment = null;
         this.floatingProduct = null;
         this.chatUrl = null;
 
+        console.log('FloatingButton instance destroyed');
         // Any other cleanup operations
     }
 
