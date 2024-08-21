@@ -235,6 +235,23 @@ class FloatingButton {
         this.iframeContainer = null;
     }
 
+    destroy() {
+        console.log('Destroying FloatingButton instance');
+        // Remove created DOM elements if they exist
+        if (this.button && this.button.parentNode) {
+            this.button.parentNode.removeChild(this.button);
+        }
+
+        // Reset properties
+        this.button = null;
+        this.userId = null;
+        this.floatingComment = null;
+        this.floatingProduct = null;
+        this.chatUrl = null;
+
+        // Any other cleanup operations
+    }
+
     async handleAuth(udid, authCode) {
         if (udid === 'test') {
             return parseInt(Math.random()*1e9);

@@ -52,7 +52,9 @@
                     } else if (method === 'update') { 
                         fb.updateParameter(params); 
                     } else if (method === 'unmount') {
-                        fb.remove();
+                        console.log('unmount');
+                        delete w.GentooIO;
+                        fb = null;
                     }
                 }; 
                 w.GentooIO = ge; 
