@@ -43,7 +43,7 @@ class FloatingButton {
                                 .then(floatingProduct => {
                                     this.replaceAmpersand(floatingProduct);
                                     console.log('floating product converted', floatingProduct)
-                                    this.floatingProduct = this.floatingProduct;
+                                    this.floatingProduct = floatingProduct;
                                     this.chatUrl = `${this.hostSrc}/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
                                     this.init(this.itemId, this.type, this.chatUrl);
                                 });
@@ -216,7 +216,9 @@ class FloatingButton {
             this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
                 .then(floatingProduct => {
                     if (!floatingProduct?.message) {
-                        this.floatingProduct = floatingProduct
+                        this.replaceAmpersand(floatingProduct);
+                        console.log('floating product converted, update', floatingProduct)
+                        this.floatingProduct = floatingProduct;
                         this.chatUrl = `${this.hostSrc}/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
                         this.init(this.itemId, this.type, this.chatUrl);
                     }
