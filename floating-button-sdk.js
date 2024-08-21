@@ -41,7 +41,7 @@ class FloatingButton {
                             this.commentType = floatingComment[2];
                             this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
                                 .then(floatingProduct => {
-                                    this.floatingProduct = floatingProduct
+                                    this.floatingProduct = this.replaceAmpersand(floatingProduct);
                                     this.chatUrl = `${this.hostSrc}/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
                                     this.init(this.itemId, this.type, this.chatUrl);
                                 });
@@ -366,6 +366,19 @@ class FloatingButton {
     logWindowWidth() {
         const width = window.innerWidth;
         return width;
+    }
+
+    replaceAmpersand(obj) {
+        // 객체의 각 키에 대해 순회
+        for (let key in obj) {
+            if (typeof obj[key] === 'string') {
+                // 값이 문자열인 경우 &를 @@으로 치환
+                obj[key] = obj[key].replace(/&/g, '@@');
+            } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+                // 값이 객체나 배열인 경우 재귀적으로 함수 호출
+                replaceAmpersand(obj[key]);
+            }
+        }
     }
 }
 
