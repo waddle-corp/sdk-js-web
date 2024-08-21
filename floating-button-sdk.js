@@ -378,7 +378,7 @@ class FloatingButton {
                 obj[key] = obj[key].replace(/&/g, '@@');
             } else if (typeof obj[key] === 'object' && obj[key] !== null) {
                 // 값이 객체나 배열인 경우 재귀적으로 함수 호출
-                replaceAmpersand(obj[key]);
+                this.replaceAmpersand(obj[key]);
             }
         }
     }
