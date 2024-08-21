@@ -226,6 +226,7 @@ class FloatingButton {
     }
 
     remove() {
+        console.log('remove called');
         if (this.button) {document.body.removeChild(this.button)};
         if (this.expandedButton) {document.body.removeChild(this.expandedButton)};
         if (this.iframeContainer) {document.body.removeChild(this.iframeContainer)};

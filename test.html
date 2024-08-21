@@ -44,13 +44,16 @@
                     ge.q.push(args) 
                 }; 
                 ge.process = function (args) { 
+                    console.log(args);
                     var method = args[0]; 
                     var params = args[1]; 
                     if (method === 'boot') { 
                         fb = new w.FloatingButton(params); 
                     } else if (method === 'update') { 
                         fb.updateParameter(params); 
-                    }; 
+                    } else if (method === 'unmount') {
+                        fb.remove();
+                    }
                 }; 
                 w.GentooIO = ge; 
                 function l() { 
@@ -62,7 +65,8 @@
                     s.src = "/floating-button-sdk.js"; 
                     s.onload = () => { 
                         while (ge.q.length) { 
-                            var args = ge.q.shift(); 
+                            var args = ge.q.shift();
+                            console.log('in while', args); 
                             ge.process(args); 
                         };  
                         var sl = () => {handleScroll(w, sl)}
@@ -99,6 +103,8 @@
             authCode: 'Token 65ca7bbe5995ac373b06bf3a2c09962a65403245',
             itemId: '3190',
         })
+
+        GentooIO('unmount', {});
     </script>
     <div>
         <div id='gentoo-sc'>
