@@ -41,7 +41,7 @@ class FloatingButton {
                             this.commentType = floatingComment[2];
                             this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
                                 .then(floatingProduct => {
-                                    replaceAmpersand(floatingProduct);
+                                    this.replaceAmpersand(floatingProduct);
                                     console.log('floating product converted', floatingProduct)
                                     this.floatingProduct = this.floatingProduct;
                                     this.chatUrl = `${this.hostSrc}/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
