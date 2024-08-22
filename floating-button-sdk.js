@@ -15,6 +15,7 @@ class FloatingButton {
         this.isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         this.hostSrc;
         this.domains;
+        this.keys;
         this.commentType;
         this.isDestroyed = false;
         
@@ -23,12 +24,20 @@ class FloatingButton {
             this.domains = {
                 auth: 'https://byg7k8r4gi.execute-api.ap-northeast-2.amazonaws.com/prod/auth',
                 recommend: 'https://byg7k8r4gi.execute-api.ap-northeast-2.amazonaws.com/prod/recommend',
+                log: 'https://byg7k8r4gi.execute-api.ap-northeast-2.amazonaws.com/prod/userEvent',
+            }
+            this.keys = {
+                log: 'EYOmgqkSmm55kxojN6ck7a4SKlvKltpd9X5r898k',
             }
         } else {
             this.hostSrc = 'https://dev-demo.gentooai.com';
             this.domains = {
                 auth: 'https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/auth',
                 recommend: 'https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/recommend',
+                log: 'https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/userEvent',
+            }
+            this.keys = {
+                log: 'G4J2wPnd643wRoQiK52PO9ZAtaD6YNCAhGlfm1Oc',
             }
         }
         
@@ -68,6 +77,7 @@ class FloatingButton {
             clientId: this.clientId,
             type: this.type,
         })
+        this.logEvent('SDKFloatingRendered');
         this.remove(this.button, this.expandedButton, this.iframeContainer);
         this.itemId = itemId;
         this.type = type;
@@ -338,6 +348,33 @@ class FloatingButton {
         }
     }
 
+    async logEvent(event) {
+        try {
+            const url = this.domains.log;
+
+            const payload = {
+                event_category: event,
+                visitorId: this.userId,
+                itemId: this.itemId,
+                clientId: this.clientId,
+            }
+
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-api-key': this.keys.log,
+                },
+                body: JSON.stringify(payload),
+            });
+    
+            const res = await response.json(); // JSON 형태의 응답 데이터 파싱
+            return [res.this, res.needs, res.case];
+        } catch (error) {
+            console.error(`Error while calling logEvent API: ${error}`);
+        }
+    } 
+
     handleTouchMove(e, iframeContainer) {
         e.preventDefault();
         const touch = e.touches[0];
@@ -378,6 +415,7 @@ class FloatingButton {
             type: this.type,
             commentType: (this.type === 'this' ? this.commentType : ''),
         })
+        this.logEvent('SDKFloatingClicked');
         if (this.isSmallResolution) {
             dimmedBackground.className = 'dimmed-background';
             button.className = 'floating-button-common hide';
