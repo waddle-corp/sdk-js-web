@@ -5,7 +5,6 @@ class FloatingButton {
         this.authCode = props.authCode;
         this.itemId = props.itemId || '23310';
         this.type = props.type || 'this';
-        console.log('input', this.clientId, this.udid, this.authCode, this.itemId, this.type);
         this.userId = '';
         this.floatingComment = [];
         this.floatingProduct = {};
@@ -13,31 +12,49 @@ class FloatingButton {
         this.browserWidth = this.logWindowWidth();
         this.isSmallResolution = this.browserWidth < 601;
         this.typeArr = ['this'];
+        this.isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         this.hostSrc;
-        if (window.location.hostname === 'dailyshot.co') {
+        this.domains;
+        this.commentType;
+        this.isDestroyed = false;
+        
+        if (window.location.hostname === 'dailyshot.co' || window.location.hostname === 'demo.gentooai.com') {
             this.hostSrc = 'https://demo.gentooai.com';
+            this.domains = {
+                auth: 'https://byg7k8r4gi.execute-api.ap-northeast-2.amazonaws.com/prod/auth',
+                recommend: 'https://byg7k8r4gi.execute-api.ap-northeast-2.amazonaws.com/prod/recommend',
+            }
         } else {
             this.hostSrc = 'https://dev-demo.gentooai.com';
-        }
-
-        Promise.all([
-            this.handleAuth(this.udid, this.authCode),
-            this.fetchFloatingComment(this.itemId),
-        ]).then(([userId, floatingComment]) => {
-            this.userId = userId;
-            if (floatingComment[0]) {
-                this.floatingComment = floatingComment;
-                this.fetchFloatingProduct(this.itemId, this.userId, this.type)
-                    .then(floatingProduct => {
-                        this.floatingProduct = floatingProduct
-                        this.chatUrl = `${this.hostSrc}/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
-                        this.init(this.itemId, this.type, this.chatUrl);
-                    });
+            this.domains = {
+                auth: 'https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/auth',
+                recommend: 'https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/recommend',
             }
-        }).catch(error => {
-            console.error(`Error while constructing FloatingButton: ${error}`);
-        })
+        }
         
+        this.handleAuth(this.udid, this.authCode)
+            .then(userId => {
+                this.userId = userId;
+                this.fetchFloatingComment(this.itemId, this.userId)
+                    .then(floatingComment => {
+                        if (floatingComment[0]) {
+                            this.floatingComment = floatingComment;
+                            this.commentType = floatingComment[2];
+                            this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
+                                .then(floatingProduct => {
+                                    this.replaceAmpersand(floatingProduct);
+                                    this.floatingProduct = floatingProduct;
+                                    this.chatUrl = `${this.hostSrc}/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
+                                    if (!this.isDestroyed) this.init(this.itemId, this.type, this.chatUrl);
+                                });
+                        }
+                    }).catch(error => {
+                        console.error(`Error while constructing FloatingButton: ${error}`);
+                    })
+            }).catch(error => {
+                console.error(`Error while calling handleAuth func: ${error}`);
+            })
+
         this.prevPosition = null;
         this.scrollPosition = 0;
         this.scrollDir = '';
@@ -106,7 +123,7 @@ class FloatingButton {
         }
 
         // Button click event
-        this.button.addEventListener('click', (e) => {
+        var buttonClickHandler = (e) => {
             e.stopPropagation();
             e.preventDefault(); 
             if (this.iframeContainer.classList.contains('iframe-container-hide')) {
@@ -118,9 +135,11 @@ class FloatingButton {
                 this.button.className = 'floating-button-common button-image';
                 this.iframeContainer.className = 'iframe-container iframe-container-hide';
             }
-        });
+        }
 
-        this.expandedButton?.addEventListener('click', (e) => {
+        this.button.addEventListener('click', buttonClickHandler);
+
+        var expandedButtonClickHandler = (e) => {
             e.stopPropagation();
             e.preventDefault(); 
             if (this.iframeContainer.classList.contains('iframe-container-hide')) {
@@ -132,18 +151,22 @@ class FloatingButton {
                 this.button.className = 'floating-button-common button-image';
                 this.iframeContainer.className = 'iframe-container iframe-container-hide';
             }
-        });
+        }
 
-        setTimeout(() => {
-            this.expandedButton.innerText = '';
-            this.expandedButton.style.width = '50px';
-            this.expandedButton.style.padding = 0;
-            this.expandedButton.style.border = 'none';
-            this.expandedButton.style.boxShadow = 'none';
-            if (this.iframeContainer.classList.contains('iframe-container-hide')) {
-                this.button.className = 'floating-button-common button-image';
-            }
-        }, [3000])
+        this.expandedButton?.addEventListener('click', expandedButtonClickHandler);
+
+        if (!this.isDestroyed) {
+            setTimeout(() => {
+                this.expandedButton.innerText = '';
+                this.expandedButton.style.width = '50px';
+                this.expandedButton.style.padding = 0;
+                this.expandedButton.style.border = 'none';
+                this.expandedButton.style.boxShadow = 'none';
+                if (this.iframeContainer.classList.contains('iframe-container-hide')) {
+                    this.button.className = 'floating-button-common button-image';
+                }
+            }, [3000])
+        }
 
         // Add event listener for the resize event
         window.addEventListener('resize', () => {
@@ -168,10 +191,13 @@ class FloatingButton {
             e.stopPropagation();
             e.preventDefault();
             dimmedBackground.className = 'dimmed-background hide';
-            this.hideChat(iframeContainer, button, expandedButton);
+            this.hideChat(iframeContainer, button, expandedButton, dimmedBackground);
         })
 
         window.addEventListener('message', (e) => {
+            if (e.data.redirectState) {
+                window.location.href=e.data.redirectUrl;
+            }
             if (this.isSmallResolution) {
                 this.enableChat(iframeContainer, button, expandedButton, dimmedBackground, 'full');
             }
@@ -191,15 +217,19 @@ class FloatingButton {
     }
 
     updateParameter(props) {
-        console.log('update Parameter called', props);
-        this.type = props.type;
-        this.fetchFloatingProduct(this.itemId, this.userId, this.type)
-            .then(floatingProduct => {
-                this.floatingProduct = floatingProduct
-                this.chatUrl = `${this.hostSrc}/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
-                this.init(this.itemId, this.type, this.chatUrl);
-                if (type === 'needs') {this.typeArr.push('needs')}
-            });
+        if (!this.floatingComment?.message && !this.floatingProduct?.message) {
+            this.type = props.type;
+            this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
+                .then(floatingProduct => {
+                    if (!floatingProduct?.message) {
+                        this.replaceAmpersand(floatingProduct);
+                        this.floatingProduct = floatingProduct;
+                        this.chatUrl = `${this.hostSrc}/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
+                        this.init(this.itemId, this.type, this.chatUrl);
+                    }
+                })
+        }
+        if (this.type === 'needs') {this.typeArr.push('needs')};
     }
 
     remove() {
@@ -211,13 +241,42 @@ class FloatingButton {
         this.iframeContainer = null;
     }
 
+    destroy() {
+        console.log('Destroying FloatingButton instance');
+        this.isDestroyed = true;
+        window.removeEventListener('resize', this.handleResize);
+        if (this.button) {
+            this.button.removeEventListener('click', this.buttonClickHandler);
+        }
+    
+        if (this.expandedButton) {
+            this.expandedButton.removeEventListener('click', this.expandedButtonClickHandler);
+        }
+        // Remove created DOM elements if they exist
+        if (this.button && this.button.parentNode) {
+            this.button.parentNode.removeChild(this.button);
+        }
+
+        // Reset properties
+        this.button = null;
+        this.expandedButton = null;
+        this.iframeContainer = null;
+        this.userId = null;
+        this.floatingComment = null;
+        this.floatingProduct = null;
+        this.chatUrl = null;
+
+        console.log('FloatingButton instance destroyed');
+        // Any other cleanup operations
+    }
+
     async handleAuth(udid, authCode) {
         if (udid === 'test') {
             return parseInt(Math.random()*1e9);
         }
         try {
             const response = await fetch(
-                'https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/auth', {
+                this.domains.auth, {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json',
@@ -236,10 +295,10 @@ class FloatingButton {
         }
     }
 
-    async fetchFloatingComment(itemId) {
+    async fetchFloatingComment(itemId, userId) {
         try {
             // URL에 itemId를 포함시켜 GET 요청 보내기
-            const url = `https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/recommend?itemId=${itemId}`;
+            const url = `${this.domains.recommend}?itemId=${itemId}&userId=${userId}`;
             
             const response = await fetch(url, {
                 method: "GET",
@@ -247,20 +306,21 @@ class FloatingButton {
             });
     
             const res = await response.json(); // JSON 형태의 응답 데이터 파싱
-            return [res.this, res.needs];
+            return [res.this, res.needs, res.case];
         } catch (error) {
             console.error(`Error while calling fetchFloatingComment API: ${error}`);
         }
     }    
 
-    async fetchFloatingProduct(itemId, userId, target) {
+    async fetchFloatingProduct(itemId, userId, target, isMobileDevice) {
         try {
-            const url = 'https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/recommend';
+            const url = this.domains.recommend;
             
             const payload = {
                 itemId: itemId,
                 userId: userId,
                 target: target, // this or needs
+                channelId: isMobileDevice ? 'mobile' : 'web',
             };
 
             const response = await fetch(url, {
@@ -316,6 +376,7 @@ class FloatingButton {
             itemId: this.itemId,
             clientId: this.clientId,
             type: this.type,
+            commentType: (this.type === 'this' ? this.commentType : ''),
         })
         if (this.isSmallResolution) {
             dimmedBackground.className = 'dimmed-background';
@@ -343,6 +404,19 @@ class FloatingButton {
     logWindowWidth() {
         const width = window.innerWidth;
         return width;
+    }
+
+    replaceAmpersand(obj) {
+        // 객체의 각 키에 대해 순회
+        for (let key in obj) {
+            if (typeof obj[key] === 'string') {
+                // 값이 문자열인 경우 &를 @@으로 치환
+                obj[key] = obj[key].replace(/&/g, '@@');
+            } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+                // 값이 객체나 배열인 경우 재귀적으로 함수 호출
+                this.replaceAmpersand(obj[key]);
+            }
+        }
     }
 }
 
