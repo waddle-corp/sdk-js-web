@@ -70,6 +70,7 @@ class FloatingButton {
     }    
     
     init(itemId, type, chatUrl) {
+        this.logEvent('SDKFloatingRendered');
         window.gtag('event', 'GentooPopped', {
             event_category: 'SDKFloatingRendered',
             event_label: 'SDK floating button is rendered',
@@ -350,7 +351,7 @@ class FloatingButton {
         }
     }
 
-    async logEvent(event) {
+    async logEvent(event, loc) {
         try {
             const url = this.domains.log;
 
@@ -358,7 +359,7 @@ class FloatingButton {
                 event_category: event,
                 visitorId: this.userId,
                 itemId: this.itemId,
-                clientId: this.clientId,
+                clientId: `${this.clientId}_${loc}`,
             }
 
             const response = await fetch(url, {
