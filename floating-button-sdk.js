@@ -127,6 +127,7 @@ class FloatingButton {
             this.expandedText.innerText = this.floatingComment[type === 'needs' ? 1 : 0] || '...';
             this.expandedText.className = 'expanded-text';
             document.body.appendChild(this.expandedButton);
+            this.typeArr.push('needs');
         }
         
 
@@ -250,7 +251,6 @@ class FloatingButton {
                     }
                 })
         }
-        if (this.type === 'needs') {this.typeArr.push('needs')};
     }
 
     remove() {
