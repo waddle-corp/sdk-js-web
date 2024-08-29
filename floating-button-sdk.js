@@ -18,6 +18,7 @@ class FloatingButton {
         this.keys;
         this.commentType;
         this.isDestroyed = false;
+        this.isMockup = this.clientId === 'mockup';
         
         if (window.location.hostname === 'dailyshot.co' || window.location.hostname === 'demo.gentooai.com') {
             this.hostSrc = 'https://demo.gentooai.com';
@@ -70,7 +71,6 @@ class FloatingButton {
     }    
     
     init(itemId, type, chatUrl) {
-        this.logEvent('SDKFloatingRendered');
         window.gtag('event', 'GentooPopped', {
             event_category: 'SDKFloatingRendered',
             event_label: 'SDK floating button is rendered',
@@ -117,9 +117,7 @@ class FloatingButton {
         // Log when finishing UI rendering
         this.logEvent('SDKFloatingRendered');
 
-        console.log('before expand button created: ', this.floatingCount);
         if(this.floatingCount < 2) {
-            console.log('after expand button created: ', this.floatingCount);
             this.expandedButton = document.createElement('div');
             this.expandedButton.className = 'expanded-button';
             this.expandedText = document.createElement('p');
@@ -187,6 +185,13 @@ class FloatingButton {
             }, [3000])
         }
 
+        if (!this.isDestroyed && !this.isMockup) {
+            setTimeout(() => {
+                this.updateParameter({type: 'needs'});
+                console.log('updated parameter after 13s');
+            }, [13000])
+        }
+
         // Add event listener for the resize event
         window.addEventListener('resize', () => {
             this.browserWidth = this.logWindowWidth();
@@ -236,13 +241,10 @@ class FloatingButton {
     }
 
     updateParameter(props) {
-        console.log('updateParameter: ', props);
-        console.log('floating comment, product? ', !this.floatingComment?.message && !this.floatingProduct?.message)
         if (!this.floatingComment?.message && !this.floatingProduct?.message) {
             this.type = props.type;
             this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
                 .then(floatingProduct => {
-                    console.log('inside floating product: ', floatingProduct);
                     if (!floatingProduct?.message) {
                         this.replaceAmpersand(floatingProduct);
                         this.floatingProduct = floatingProduct;
