@@ -78,7 +78,6 @@ class FloatingButton {
             clientId: this.clientId,
             type: this.type,
         })
-        this.logEvent('SDKFloatingRendered');
         this.remove(this.button, this.expandedButton, this.iframeContainer);
         this.itemId = itemId;
         this.type = type;
@@ -114,6 +113,10 @@ class FloatingButton {
         this.button.type = 'button';
         document.body.appendChild(this.iframeContainer);
         document.body.appendChild(this.button);
+
+        // Log when finishing UI rendering
+        this.logEvent('SDKFloatingRendered');
+
         if(this.typeArr.length < 2) {
             this.expandedButton = document.createElement('div');
             this.expandedButton.className = 'expanded-button';
@@ -230,6 +233,7 @@ class FloatingButton {
     }
 
     updateParameter(props) {
+        console.log('updateParameter: ', props);
         if (!this.floatingComment?.message && !this.floatingProduct?.message) {
             this.type = props.type;
             this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
