@@ -185,7 +185,7 @@ class FloatingButton {
             }, [3000])
         }
 
-        if (!this.isDestroyed && !this.isMockup && this.floatingCount < 1) {
+        if (!this.isDestroyed && !this.isMockup && this.floatingCount < 2) {
             setTimeout(() => {
                 this.updateParameter({type: 'needs'});
             }, [13000])
