@@ -188,7 +188,6 @@ class FloatingButton {
         if (!this.isDestroyed && !this.isMockup) {
             setTimeout(() => {
                 this.updateParameter({type: 'needs'});
-                console.log('updated parameter after 13s');
             }, [13000])
         }
 
