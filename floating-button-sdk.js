@@ -117,7 +117,9 @@ class FloatingButton {
         // Log when finishing UI rendering
         this.logEvent('SDKFloatingRendered');
 
+        console.log('before expand button created: ', this.typeArr.length);
         if(this.typeArr.length < 2) {
+            console.log('after expand button created: ', this.typeArr.length);
             this.expandedButton = document.createElement('div');
             this.expandedButton.className = 'expanded-button';
             this.expandedText = document.createElement('p');
@@ -234,10 +236,12 @@ class FloatingButton {
 
     updateParameter(props) {
         console.log('updateParameter: ', props);
+        console.log('floating comment, product? ', !this.floatingComment?.message && !this.floatingProduct?.message)
         if (!this.floatingComment?.message && !this.floatingProduct?.message) {
             this.type = props.type;
             this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
                 .then(floatingProduct => {
+                    console.log('inside floating product: ', floatingProduct);
                     if (!floatingProduct?.message) {
                         this.replaceAmpersand(floatingProduct);
                         this.floatingProduct = floatingProduct;
