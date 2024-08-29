@@ -11,7 +11,7 @@ class FloatingButton {
         this.chatUrl = '';
         this.browserWidth = this.logWindowWidth();
         this.isSmallResolution = this.browserWidth < 601;
-        this.typeArr = ['this'];
+        this.floatingCount = 0;
         this.isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         this.hostSrc;
         this.domains;
@@ -117,9 +117,9 @@ class FloatingButton {
         // Log when finishing UI rendering
         this.logEvent('SDKFloatingRendered');
 
-        console.log('before expand button created: ', this.typeArr.length);
-        if(this.typeArr.length < 2) {
-            console.log('after expand button created: ', this.typeArr.length);
+        console.log('before expand button created: ', this.floatingCount);
+        if(this.floatingCount < 2) {
+            console.log('after expand button created: ', this.floatingCount);
             this.expandedButton = document.createElement('div');
             this.expandedButton.className = 'expanded-button';
             this.expandedText = document.createElement('p');
@@ -127,7 +127,7 @@ class FloatingButton {
             this.expandedText.innerText = this.floatingComment[type === 'needs' ? 1 : 0] || '...';
             this.expandedText.className = 'expanded-text';
             document.body.appendChild(this.expandedButton);
-            this.typeArr.push('needs');
+            this.floatingCount += 1;
         }
         
 
