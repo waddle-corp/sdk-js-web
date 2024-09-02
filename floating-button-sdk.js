@@ -146,9 +146,10 @@ class FloatingButton {
                 this.button.className = 'floating-button-common button-image-close';
                 this.openChat(e, this.elems);
             } else {
-                this.expandedButton.className = 'expanded-button';
-                this.button.className = 'floating-button-common button-image';
-                this.iframeContainer.className = 'iframe-container iframe-container-hide';
+                this.hideChat(this.elems.iframeContainer, this.elems.button, this.elems.expandedButton, this.elems.dimmedBackground);
+                // this.expandedButton.className = 'expanded-button';
+                // this.button.className = 'floating-button-common button-image';
+                // this.iframeContainer.className = 'iframe-container iframe-container-hide';
             }
         }
 
@@ -162,9 +163,10 @@ class FloatingButton {
                 this.button.className = 'floating-button-common button-image-close';
                 this.openChat(e, this.elems);
             } else {
-                this.expandedButton.className = 'expanded-button';
-                this.button.className = 'floating-button-common button-image';
-                this.iframeContainer.className = 'iframe-container iframe-container-hide';
+                this.hideChat(this.elems.iframeContainer, this.elems.button, this.elems.expandedButton, this.elems.dimmedBackground);
+                // this.expandedButton.className = 'expanded-button';
+                // this.button.className = 'floating-button-common button-image';
+                // this.iframeContainer.className = 'iframe-container iframe-container-hide';
             }
         }
 
@@ -185,11 +187,11 @@ class FloatingButton {
             }, [3000])
         }
 
-        if (!this.isDestroyed && !this.isMockup && this.floatingCount < 2) {
-            setTimeout(() => {
-                this.updateParameter({type: 'needs'});
-            }, [13000])
-        }
+        // if (!this.isDestroyed && !this.isMockup && this.floatingCount < 2) {
+        //     setTimeout(() => {
+        //         this.updateParameter({type: 'needs'});
+        //     }, [13000])
+        // }
 
         // Add event listener for the resize event
         window.addEventListener('resize', () => {
@@ -418,6 +420,12 @@ class FloatingButton {
         this.scrollDir = '';
     }
 
+    enableExpand() {
+        setTimeout(() => {
+            this.updateParameter({type: 'needs'});
+        }, [10000])
+    }
+
     enableChat(iframeContainer, button, expandedButton, dimmedBackground, mode) {
         window.gtag('event', 'iconClicked', {
             event_category: 'SDKFloatingClicked',
@@ -444,6 +452,11 @@ class FloatingButton {
     }
 
     hideChat(iframeContainer, button, expandedButton, dimmedBackground) {
+        console.log('before expand called, ', !this.isDestroyed, !this.isMockup, this.floatingCount);
+        if (!this.isDestroyed && !this.isMockup && this.floatingCount < 2) {
+            console.log('enable expand called');
+            this.enableExpand();
+        }
         button.className = 'floating-button-common button-image';
         expandedButton.className = 'expanded-button hide';
         iframeContainer.className = 'iframe-container iframe-container-hide';
