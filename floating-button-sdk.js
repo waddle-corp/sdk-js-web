@@ -452,9 +452,7 @@ class FloatingButton {
     }
 
     hideChat(iframeContainer, button, expandedButton, dimmedBackground) {
-        console.log('before expand called, ', !this.isDestroyed, !this.isMockup, this.floatingCount);
         if (!this.isDestroyed && !this.isMockup && this.floatingCount < 2) {
-            console.log('enable expand called');
             this.enableExpand();
         }
         button.className = 'floating-button-common button-image';
