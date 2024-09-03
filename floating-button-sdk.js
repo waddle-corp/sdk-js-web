@@ -121,12 +121,12 @@ class FloatingButton {
         // Log when finishing UI rendering
         this.logEvent('SDKFloatingRendered');
 
-        if(this.floatingCount < 2) {
+        if(this.floatingCount < 2 && this.floatingComment.length > 0) {
             this.expandedButton = document.createElement('div');
             this.expandedButton.className = 'expanded-button';
             this.expandedText = document.createElement('p');
             this.expandedButton.appendChild(this.expandedText);
-            this.expandedText.innerText = this.floatingComment[type === 'needs' ? 1 : 0] || '';
+            this.expandedText.innerText = this.floatingComment[type === 'needs' ? 1 : 0] || '...';
             this.expandedText.className = 'expanded-text';
             document.body.appendChild(this.expandedButton);
             this.floatingCount += 1;
