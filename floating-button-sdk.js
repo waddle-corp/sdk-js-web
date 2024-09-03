@@ -58,7 +58,9 @@ class FloatingButton {
                                     if (!this.isDestroyed) this.init(this.itemId, this.type, this.chatUrl);
                                 });
                         } else {
-                            this.chatUrl = `${this.hostSrc}/${this.clientId}/${this.userId}?isMobile=${true}`
+                            console.log('chatUrl', `${this.hostSrc}/${this.clientId}/${this.userId}?isMobile=${true}`);
+                            this.chatUrl = `${this.hostSrc}/${this.clientId}/${this.userId}?isMobile=${true}`;
+                            if (!this.isDestroyed) this.init('basic', 'basic', this.chatUrl);
                         }
                     }).catch(error => {
                         console.error(`Error while constructing FloatingButton: ${error}`);
@@ -124,7 +126,7 @@ class FloatingButton {
             this.expandedButton.className = 'expanded-button';
             this.expandedText = document.createElement('p');
             this.expandedButton.appendChild(this.expandedText);
-            this.expandedText.innerText = this.floatingComment[type === 'needs' ? 1 : 0] || '...';
+            this.expandedText.innerText = this.floatingComment[type === 'needs' ? 1 : 0] || '';
             this.expandedText.className = 'expanded-text';
             document.body.appendChild(this.expandedButton);
             this.floatingCount += 1;
