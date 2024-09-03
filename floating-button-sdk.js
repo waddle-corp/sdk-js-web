@@ -57,6 +57,8 @@ class FloatingButton {
                                     this.chatUrl = `${this.hostSrc}/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
                                     if (!this.isDestroyed) this.init(this.itemId, this.type, this.chatUrl);
                                 });
+                        } else {
+                            this.chatUrl = `${this.hostSrc}/${this.clientId}/${this.userId}?isMobile=${true}`
                         }
                     }).catch(error => {
                         console.error(`Error while constructing FloatingButton: ${error}`);
