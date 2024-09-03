@@ -460,7 +460,7 @@ class FloatingButton {
             this.enableExpand();
         }
         button.className = 'floating-button-common button-image';
-        expandedButton.className = 'expanded-button hide';
+        if (expandedButton) expandedButton.className = 'expanded-button hide';
         iframeContainer.className = 'iframe-container iframe-container-hide';
         dimmedBackground.className = 'dimmed-background hide';
     }
