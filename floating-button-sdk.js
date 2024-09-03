@@ -146,7 +146,7 @@ class FloatingButton {
             e.stopPropagation();
             e.preventDefault(); 
             if (this.iframeContainer.classList.contains('iframe-container-hide')) {
-                this.expandedButton.className = 'expanded-button hide';
+                if (this.expandedButton) this.expandedButton.className = 'expanded-button hide';
                 this.button.className = 'floating-button-common button-image-close';
                 this.openChat(e, this.elems);
             } else {
