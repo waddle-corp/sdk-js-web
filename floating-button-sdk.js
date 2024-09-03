@@ -113,7 +113,7 @@ class FloatingButton {
 
         // Create floating button
         this.button = document.createElement('div');
-        this.button.className = 'floating-button-common button-image-shrink';
+        this.button.className = `floating-button-common ${this.floatingComment.length > 0 ? 'button-image' : 'button-image-shrink'}`;
         this.button.type = 'button';
         document.body.appendChild(this.iframeContainer);
         document.body.appendChild(this.button);
@@ -176,7 +176,7 @@ class FloatingButton {
 
         this.expandedButton?.addEventListener('click', expandedButtonClickHandler);
 
-        if (!this.isDestroyed) {
+        if (!this.isDestroyed && this.floatingComment.length > 0) {
             setTimeout(() => {
                 if (this.expandedButton) {
                     this.expandedButton.innerText = '';
