@@ -444,7 +444,7 @@ class FloatingButton {
         if (this.isSmallResolution) {
             dimmedBackground.className = 'dimmed-background';
             button.className = 'floating-button-common hide';
-            expandedButton.className = 'expanded-button hide';
+            if (expandedButton) expandedButton.className = 'expanded-button hide';
         }
         if (mode === 'shrink') {
             iframeContainer.className = 'iframe-container-shrink';
