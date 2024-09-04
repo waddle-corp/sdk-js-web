@@ -54,7 +54,8 @@ class FloatingButton {
                                 .then(floatingProduct => {
                                     this.replaceAmpersand(floatingProduct);
                                     this.floatingProduct = floatingProduct;
-                                    this.chatUrl = `${this.hostSrc}/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
+                                    // clientId variable required in chatUrl for the future 
+                                    this.chatUrl = `${this.hostSrc}/dlst/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
                                     if (!this.isDestroyed) this.init(this.itemId, this.type, this.chatUrl);
                                 });
                         } else {
@@ -253,7 +254,8 @@ class FloatingButton {
                     if (!floatingProduct?.message) {
                         this.replaceAmpersand(floatingProduct);
                         this.floatingProduct = floatingProduct;
-                        this.chatUrl = `${this.hostSrc}/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
+                        // client variable required in chatUrl for the future
+                        this.chatUrl = `${this.hostSrc}/dlst/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
                         this.init(this.itemId, this.type, this.chatUrl);
                     }
                 })
