@@ -59,7 +59,8 @@ class FloatingButton {
                                     if (!this.isDestroyed) this.init(this.itemId, this.type, this.chatUrl);
                                 });
                         } else {
-                            this.chatUrl = `${this.hostSrc}/${this.clientId}/${this.userId}?isMobile=${true}`;
+                            // client variable required in chatUrl for the future
+                            this.chatUrl = `${this.hostSrc}/dlst/${this.userId}?isMobile=${true}`;
                             if (!this.isDestroyed) this.init('basic', 'basic', this.chatUrl);
                         }
                     }).catch(error => {
