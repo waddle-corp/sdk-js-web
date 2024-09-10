@@ -11,13 +11,14 @@ class FloatingButton {
         this.chatUrl = '';
         this.browserWidth = this.logWindowWidth();
         this.isSmallResolution = this.browserWidth < 601;
-        this.typeArr = ['this'];
+        this.floatingCount = 0;
         this.isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         this.hostSrc;
         this.domains;
         this.keys;
         this.commentType;
         this.isDestroyed = false;
+        this.isMockup = this.clientId === 'mockup';
         
         if (window.location.hostname === 'dailyshot.co' || window.location.hostname === 'demo.gentooai.com') {
             this.hostSrc = 'https://demo.gentooai.com';
@@ -53,9 +54,14 @@ class FloatingButton {
                                 .then(floatingProduct => {
                                     this.replaceAmpersand(floatingProduct);
                                     this.floatingProduct = floatingProduct;
-                                    this.chatUrl = `${this.hostSrc}/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
+                                    // clientId variable required in chatUrl for the future 
+                                    this.chatUrl = `${this.hostSrc}/dlst/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
                                     if (!this.isDestroyed) this.init(this.itemId, this.type, this.chatUrl);
                                 });
+                        } else {
+                            // client variable required in chatUrl for the future
+                            this.chatUrl = `${this.hostSrc}/dlst/${this.userId}?isMobile=${true}`;
+                            if (!this.isDestroyed) this.init('basic', 'basic', this.chatUrl);
                         }
                     }).catch(error => {
                         console.error(`Error while constructing FloatingButton: ${error}`);
@@ -109,11 +115,15 @@ class FloatingButton {
 
         // Create floating button
         this.button = document.createElement('div');
-        this.button.className = 'floating-button-common button-image-shrink';
+        this.button.className = `floating-button-common ${this.floatingComment.length > 0 ? 'button-image-shrink' : 'button-image'}`;
         this.button.type = 'button';
         document.body.appendChild(this.iframeContainer);
         document.body.appendChild(this.button);
-        if(this.typeArr.length < 2) {
+
+        // Log when finishing UI rendering
+        this.logEvent('SDKFloatingRendered');
+
+        if(this.floatingCount < 2 && this.floatingComment.length > 0) {
             this.expandedButton = document.createElement('div');
             this.expandedButton.className = 'expanded-button';
             this.expandedText = document.createElement('p');
@@ -121,6 +131,7 @@ class FloatingButton {
             this.expandedText.innerText = this.floatingComment[type === 'needs' ? 1 : 0] || '...';
             this.expandedText.className = 'expanded-text';
             document.body.appendChild(this.expandedButton);
+            this.floatingCount += 1;
         }
         
 
@@ -137,13 +148,14 @@ class FloatingButton {
             e.stopPropagation();
             e.preventDefault(); 
             if (this.iframeContainer.classList.contains('iframe-container-hide')) {
-                this.expandedButton.className = 'expanded-button hide';
+                if (this.expandedButton) this.expandedButton.className = 'expanded-button hide';
                 this.button.className = 'floating-button-common button-image-close';
                 this.openChat(e, this.elems);
             } else {
-                this.expandedButton.className = 'expanded-button';
-                this.button.className = 'floating-button-common button-image';
-                this.iframeContainer.className = 'iframe-container iframe-container-hide';
+                this.hideChat(this.elems.iframeContainer, this.elems.button, this.elems.expandedButton, this.elems.dimmedBackground);
+                // this.expandedButton.className = 'expanded-button';
+                // this.button.className = 'floating-button-common button-image';
+                // this.iframeContainer.className = 'iframe-container iframe-container-hide';
             }
         }
 
@@ -157,15 +169,16 @@ class FloatingButton {
                 this.button.className = 'floating-button-common button-image-close';
                 this.openChat(e, this.elems);
             } else {
-                this.expandedButton.className = 'expanded-button';
-                this.button.className = 'floating-button-common button-image';
-                this.iframeContainer.className = 'iframe-container iframe-container-hide';
+                this.hideChat(this.elems.iframeContainer, this.elems.button, this.elems.expandedButton, this.elems.dimmedBackground);
+                // this.expandedButton.className = 'expanded-button';
+                // this.button.className = 'floating-button-common button-image';
+                // this.iframeContainer.className = 'iframe-container iframe-container-hide';
             }
         }
 
         this.expandedButton?.addEventListener('click', expandedButtonClickHandler);
 
-        if (!this.isDestroyed) {
+        if (!this.isDestroyed && this.floatingComment.length > 0) {
             setTimeout(() => {
                 if (this.expandedButton) {
                     this.expandedButton.innerText = '';
@@ -179,6 +192,12 @@ class FloatingButton {
                 }
             }, [3000])
         }
+
+        // if (!this.isDestroyed && !this.isMockup && this.floatingCount < 2) {
+        //     setTimeout(() => {
+        //         this.updateParameter({type: 'needs'});
+        //     }, [13000])
+        // }
 
         // Add event listener for the resize event
         window.addEventListener('resize', () => {
@@ -236,12 +255,12 @@ class FloatingButton {
                     if (!floatingProduct?.message) {
                         this.replaceAmpersand(floatingProduct);
                         this.floatingProduct = floatingProduct;
-                        this.chatUrl = `${this.hostSrc}/${this.clientId}/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
+                        // client variable required in chatUrl for the future
+                        this.chatUrl = `${this.hostSrc}/dlst/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
                         this.init(this.itemId, this.type, this.chatUrl);
                     }
                 })
         }
-        if (this.type === 'needs') {this.typeArr.push('needs')};
     }
 
     remove() {
@@ -350,7 +369,7 @@ class FloatingButton {
         }
     }
 
-    async logEvent(event) {
+    async logEvent(event, loc) {
         try {
             const url = this.domains.log;
 
@@ -358,7 +377,7 @@ class FloatingButton {
                 event_category: event,
                 visitorId: this.userId,
                 itemId: this.itemId,
-                clientId: this.clientId,
+                clientId: `${this.clientId}_${loc}`,
             }
 
             const response = await fetch(url, {
@@ -408,6 +427,12 @@ class FloatingButton {
         this.scrollDir = '';
     }
 
+    enableExpand() {
+        setTimeout(() => {
+            this.updateParameter({type: 'needs'});
+        }, [10000])
+    }
+
     enableChat(iframeContainer, button, expandedButton, dimmedBackground, mode) {
         window.gtag('event', 'iconClicked', {
             event_category: 'SDKFloatingClicked',
@@ -421,7 +446,7 @@ class FloatingButton {
         if (this.isSmallResolution) {
             dimmedBackground.className = 'dimmed-background';
             button.className = 'floating-button-common hide';
-            expandedButton.className = 'expanded-button hide';
+            if (expandedButton) expandedButton.className = 'expanded-button hide';
         }
         if (mode === 'shrink') {
             iframeContainer.className = 'iframe-container-shrink';
@@ -434,8 +459,11 @@ class FloatingButton {
     }
 
     hideChat(iframeContainer, button, expandedButton, dimmedBackground) {
+        if (!this.isDestroyed && !this.isMockup && this.floatingCount < 2) {
+            this.enableExpand();
+        }
         button.className = 'floating-button-common button-image';
-        expandedButton.className = 'expanded-button hide';
+        if (expandedButton) expandedButton.className = 'expanded-button hide';
         iframeContainer.className = 'iframe-container iframe-container-hide';
         dimmedBackground.className = 'dimmed-background hide';
     }
