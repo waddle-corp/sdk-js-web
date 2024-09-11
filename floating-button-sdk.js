@@ -31,7 +31,8 @@ class FloatingButton {
                 log: 'EYOmgqkSmm55kxojN6ck7a4SKlvKltpd9X5r898k',
             }
         } else {
-            this.hostSrc = 'https://dev-demo.gentooai.com';
+            // this.hostSrc = 'https://dev-demo.gentooai.com';
+            this.hostSrc = 'https://accio-webclient-git-feat-greetingwithneeds-waddle.vercel.app';
             this.domains = {
                 auth: 'https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/auth',
                 recommend: 'https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/recommend',
@@ -50,14 +51,16 @@ class FloatingButton {
                         if (floatingComment[0]) {
                             this.floatingComment = floatingComment;
                             this.commentType = floatingComment[2];
-                            this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
-                                .then(floatingProduct => {
-                                    this.replaceAmpersand(floatingProduct);
-                                    this.floatingProduct = floatingProduct;
-                                    // clientId variable required in chatUrl for the future 
-                                    this.chatUrl = `${this.hostSrc}/dlst/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
-                                    if (!this.isDestroyed) this.init(this.itemId, this.type, this.chatUrl);
-                                });
+                            this.chatUrl = `${this.hostSrc}/dlst/sdk/${this.userId}?i=${this.itemId}&u=${this.userId}&t=${this.type}&isMobile=${this.isMobileDevice}&fc=${this.floatingComment[0]}`;
+                            if (!this.isDestroyed) this.init(this.itemId, this.type, this.chatUrl);
+                            // this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
+                            //     .then(floatingProduct => {
+                            //         this.replaceAmpersand(floatingProduct);
+                            //         this.floatingProduct = floatingProduct;
+                            //         // clientId variable required in chatUrl for the future 
+                            //         this.chatUrl = `${this.hostSrc}/dlst/sdk/${this.userId}?i=${this.itemId}&u=${this.userId}&t=${this.type}&isMobile=${this.isMobileDevice}&fc=${floatingComment[0]}`;
+                            //         if (!this.isDestroyed) this.init(this.itemId, this.type, this.chatUrl);
+                            //     });
                         } else {
                             // client variable required in chatUrl for the future
                             this.chatUrl = `${this.hostSrc}/dlst/${this.userId}?isMobile=${true}`;
@@ -83,6 +86,7 @@ class FloatingButton {
             clientId: this.clientId,
             type: this.type,
         })
+        this.logEvent('SDKFloatingRendered');
         this.remove(this.button, this.expandedButton, this.iframeContainer);
         this.itemId = itemId;
         this.type = type;
@@ -249,16 +253,18 @@ class FloatingButton {
     updateParameter(props) {
         if (!this.floatingComment?.message && !this.floatingProduct?.message) {
             this.type = props.type;
-            this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
-                .then(floatingProduct => {
-                    if (!floatingProduct?.message) {
-                        this.replaceAmpersand(floatingProduct);
-                        this.floatingProduct = floatingProduct;
-                        // client variable required in chatUrl for the future
-                        this.chatUrl = `${this.hostSrc}/dlst/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
-                        this.init(this.itemId, this.type, this.chatUrl);
-                    }
-                })
+            this.chatUrl = `${this.hostSrc}/dlst/sdk/${this.userId}?i=${this.itemId}&u=${this.userId}&t=${this.type}&isMobile=${this.isMobileDevice}&fc=${this.floatingComment[1]}`;
+            if (!this.isDestroyed) this.init(this.itemId, this.type, this.chatUrl);
+            // this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
+            //     .then(floatingProduct => {
+            //         if (!floatingProduct?.message) {
+            //             this.replaceAmpersand(floatingProduct);
+            //             this.floatingProduct = floatingProduct;
+            //             // client variable required in chatUrl for the future
+            //             this.chatUrl = `${this.hostSrc}/dlst/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
+            //             this.init(this.itemId, this.type, this.chatUrl);
+            //         }
+            //     })
         }
     }
 
