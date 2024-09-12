@@ -31,8 +31,8 @@ class FloatingButton {
                 log: 'EYOmgqkSmm55kxojN6ck7a4SKlvKltpd9X5r898k',
             }
         } else {
-            // this.hostSrc = 'https://dev-demo.gentooai.com';
-            this.hostSrc = 'https://accio-webclient-git-feat-greetingwithneeds-waddle.vercel.app';
+            this.hostSrc = 'https://dev-demo.gentooai.com';
+            // this.hostSrc = 'https://accio-webclient-git-feat-greetingwithneeds-waddle.vercel.app';
             this.domains = {
                 auth: 'https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/auth',
                 recommend: 'https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/recommend',
@@ -448,6 +448,12 @@ class FloatingButton {
             commentType: (this.type === 'this' ? this.commentType : ''),
         })
         this.logEvent('SDKFloatingClicked');
+        
+        var isChatOpenState = {
+            isChatOpen: true,
+        }
+        this.iframe.contentWindow.postMessage(isChatOpenState, '*');
+
         if (this.isSmallResolution) {
             dimmedBackground.className = 'dimmed-background';
             button.className = 'floating-button-common hide';
