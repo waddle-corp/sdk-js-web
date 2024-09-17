@@ -51,7 +51,7 @@ class FloatingButton {
                         if (floatingComment[0]) {
                             this.floatingComment = floatingComment;
                             this.commentType = floatingComment[2];
-                            this.chatUrl = `${this.hostSrc}/dlst/sdk/${this.userId}?i=${this.itemId}&u=${this.userId}&t=${this.type}&isMobile=${this.isMobileDevice}&fc=${this.floatingComment[0]}`;
+                            this.chatUrl = `${this.hostSrc}/dlst/sdk/${this.userId}?i=${this.itemId}&u=${this.userId}&t=${this.type}&ch=${this.isMobileDevice}&fc=${this.floatingComment[0]}`;
                             if (!this.isDestroyed) this.init(this.itemId, this.type, this.chatUrl);
                             // this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
                             //     .then(floatingProduct => {
@@ -432,7 +432,7 @@ class FloatingButton {
         this.scrollDir = '';
     }
 
-    enableExpand() {
+    enableExpandTimer() {
         setTimeout(() => {
             this.updateParameter({type: 'needs'});
         }, [10000])
@@ -471,7 +471,8 @@ class FloatingButton {
 
     hideChat(iframeContainer, button, expandedButton, dimmedBackground) {
         if (!this.isDestroyed && !this.isMockup && this.floatingCount < 2) {
-            this.enableExpand();
+            // mockup is not the case cause scroll event is applied
+            this.enableExpandTimer();
         }
         button.className = 'floating-button-common button-image';
         if (expandedButton) expandedButton.className = 'expanded-button hide';
