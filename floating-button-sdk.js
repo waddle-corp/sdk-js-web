@@ -13,6 +13,7 @@ class FloatingButton {
         this.isSmallResolution = this.browserWidth < 601;
         this.floatingCount = 0;
         this.isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        console.log('isMobileDevice at SDK', this.isMobileDevice);
         this.hostSrc;
         this.domains;
         this.keys;
