@@ -32,7 +32,7 @@ class FloatingButton {
             }
         } else {
             this.hostSrc = 'https://dev-demo.gentooai.com';
-            // this.hostSrc = 'https://accio-webclient-git-feat-greetingwithneeds-waddle.vercel.app';
+            // this.hostSrc = 'https://accio-webclient-git-feat-gent-670-waddle.vercel.app';
             this.domains = {
                 auth: 'https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/auth',
                 recommend: 'https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/recommend',
@@ -63,7 +63,7 @@ class FloatingButton {
                             //     });
                         } else {
                             // client variable required in chatUrl for the future
-                            this.chatUrl = `${this.hostSrc}/dlst/${this.userId}?isMobile=${true}`;
+                            this.chatUrl = `${this.hostSrc}/dlst/${this.userId}?ch=${this.isMobileDevice}`;
                             if (!this.isDestroyed) this.init('basic', 'basic', this.chatUrl);
                         }
                     }).catch(error => {
@@ -253,7 +253,7 @@ class FloatingButton {
     updateParameter(props) {
         if (!this.floatingComment?.message && !this.floatingProduct?.message) {
             this.type = props.type;
-            this.chatUrl = `${this.hostSrc}/dlst/sdk/${this.userId}?i=${this.itemId}&u=${this.userId}&t=${this.type}&isMobile=${this.isMobileDevice}&fc=${this.floatingComment[1]}`;
+            this.chatUrl = `${this.hostSrc}/dlst/sdk/${this.userId}?i=${this.itemId}&u=${this.userId}&t=${this.type}&ch=${this.isMobileDevice}&fc=${this.floatingComment[1]}`;
             if (!this.isDestroyed) this.init(this.itemId, this.type, this.chatUrl);
             // this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
             //     .then(floatingProduct => {
@@ -383,6 +383,7 @@ class FloatingButton {
                 visitorId: this.userId,
                 itemId: this.itemId,
                 clientId: `${this.clientId}_${loc}`,
+                channelId: this.isMobileDevice ? 'Mobile' : 'Web',
             }
 
             const response = await fetch(url, {
@@ -486,18 +487,18 @@ class FloatingButton {
         return width;
     }
 
-    replaceAmpersand(obj) {
-        // 객체의 각 키에 대해 순회
-        for (let key in obj) {
-            if (typeof obj[key] === 'string') {
-                // 값이 문자열인 경우 &를 @@으로 치환
-                obj[key] = obj[key].replace(/&/g, '@@');
-            } else if (typeof obj[key] === 'object' && obj[key] !== null) {
-                // 값이 객체나 배열인 경우 재귀적으로 함수 호출
-                this.replaceAmpersand(obj[key]);
-            }
-        }
-    }
+    // replaceAmpersand(obj) {
+    //     // 객체의 각 키에 대해 순회
+    //     for (let key in obj) {
+    //         if (typeof obj[key] === 'string') {
+    //             // 값이 문자열인 경우 &를 @@으로 치환
+    //             obj[key] = obj[key].replace(/&/g, '@@');
+    //         } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+    //             // 값이 객체나 배열인 경우 재귀적으로 함수 호출
+    //             this.replaceAmpersand(obj[key]);
+    //         }
+    //     }
+    // }
 }
 
 // Export as a global variable
