@@ -383,7 +383,7 @@ class FloatingButton {
                 visitorId: this.userId,
                 itemId: this.itemId,
                 clientId: `${this.clientId}_${loc}`,
-                channelId: this.isMobileDevice ? 'Mobile' : 'Web',
+                channelId: this.isMobileDevice ? 'mobile' : 'web',
             }
 
             const response = await fetch(url, {
