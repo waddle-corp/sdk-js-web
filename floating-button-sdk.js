@@ -18,7 +18,9 @@ class FloatingButton {
         this.keys;
         this.commentType;
         this.isDestroyed = false;
-        this.isMockup = this.clientId === 'mockup';
+        this.needsTimer = setTimeout(() => {
+            this.updateParameter({type: 'needs'});
+        }, 10000);
         
         if (window.location.hostname === 'dailyshot.co' || window.location.hostname === 'demo.gentooai.com') {
             this.hostSrc = 'https://demo.gentooai.com';
@@ -53,14 +55,6 @@ class FloatingButton {
                             this.commentType = floatingComment[2];
                             this.chatUrl = `${this.hostSrc}/dlst/sdk/${this.userId}?i=${this.itemId}&u=${this.userId}&t=${this.type}&ch=${this.isMobileDevice}&fc=${this.floatingComment[0]}`;
                             if (!this.isDestroyed) this.init(this.itemId, this.type, this.chatUrl);
-                            // this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
-                            //     .then(floatingProduct => {
-                            //         this.replaceAmpersand(floatingProduct);
-                            //         this.floatingProduct = floatingProduct;
-                            //         // clientId variable required in chatUrl for the future 
-                            //         this.chatUrl = `${this.hostSrc}/dlst/sdk/${this.userId}?i=${this.itemId}&u=${this.userId}&t=${this.type}&isMobile=${this.isMobileDevice}&fc=${floatingComment[0]}`;
-                            //         if (!this.isDestroyed) this.init(this.itemId, this.type, this.chatUrl);
-                            //     });
                         } else {
                             // client variable required in chatUrl for the future
                             this.chatUrl = `${this.hostSrc}/dlst/${this.userId}?ch=${this.isMobileDevice}`;
@@ -156,9 +150,6 @@ class FloatingButton {
                 this.openChat(e, this.elems);
             } else {
                 this.hideChat(this.elems.iframeContainer, this.elems.button, this.elems.expandedButton, this.elems.dimmedBackground);
-                // this.expandedButton.className = 'expanded-button';
-                // this.button.className = 'floating-button-common button-image';
-                // this.iframeContainer.className = 'iframe-container iframe-container-hide';
             }
         }
 
@@ -173,9 +164,6 @@ class FloatingButton {
                 this.openChat(e, this.elems);
             } else {
                 this.hideChat(this.elems.iframeContainer, this.elems.button, this.elems.expandedButton, this.elems.dimmedBackground);
-                // this.expandedButton.className = 'expanded-button';
-                // this.button.className = 'floating-button-common button-image';
-                // this.iframeContainer.className = 'iframe-container iframe-container-hide';
             }
         }
 
@@ -194,13 +182,11 @@ class FloatingButton {
                     this.button.className = 'floating-button-common button-image';
                 }
             }, [3000])
+            if (this.type !== 'needs') {
+                console.log('update params', this.type);
+                this.enableExpandTimer('on');
+            }
         }
-
-        // if (!this.isDestroyed && !this.isMockup && this.floatingCount < 2) {
-        //     setTimeout(() => {
-        //         this.updateParameter({type: 'needs'});
-        //     }, [13000])
-        // }
 
         // Add event listener for the resize event
         window.addEventListener('resize', () => {
@@ -243,28 +229,12 @@ class FloatingButton {
         });
     }
 
-    log(data) {
-        if (data === 'needs') {
-            this.type = 'needs';
-            this.init();
-        }
-    }
-
     updateParameter(props) {
+        console.log('update parameter func called', props, !this.floatingComment?.message && !this.floatingProduct?.message);
         if (!this.floatingComment?.message && !this.floatingProduct?.message) {
             this.type = props.type;
             this.chatUrl = `${this.hostSrc}/dlst/sdk/${this.userId}?i=${this.itemId}&u=${this.userId}&t=${this.type}&ch=${this.isMobileDevice}&fc=${this.floatingComment[1]}`;
             if (!this.isDestroyed) this.init(this.itemId, this.type, this.chatUrl);
-            // this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
-            //     .then(floatingProduct => {
-            //         if (!floatingProduct?.message) {
-            //             this.replaceAmpersand(floatingProduct);
-            //             this.floatingProduct = floatingProduct;
-            //             // client variable required in chatUrl for the future
-            //             this.chatUrl = `${this.hostSrc}/dlst/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
-            //             this.init(this.itemId, this.type, this.chatUrl);
-            //         }
-            //     })
         }
     }
 
@@ -433,10 +403,20 @@ class FloatingButton {
         this.scrollDir = '';
     }
 
-    enableExpandTimer() {
-        setTimeout(() => {
-            this.updateParameter({type: 'needs'});
-        }, [10000])
+    enableExpandTimer(mode) {
+        if (this.needsTimer) {
+            clearTimeout(this.needsTimer);  // 기존 타이머를 먼저 클리어
+        }
+        if (mode === 'on') {
+            this.needsTimer = setTimeout(() => {
+                this.updateParameter({type: 'needs'});
+            }, 10000);
+            console.log('on mode enabled');
+        }
+        else if (mode === 'off') {
+            clearTimeout(this.needsTimer);  // 타이머 클리어
+            console.log('off mode enabled');
+        }
     }
 
     enableChat(iframeContainer, button, expandedButton, dimmedBackground, mode) {
@@ -449,6 +429,7 @@ class FloatingButton {
             commentType: (this.type === 'this' ? this.commentType : ''),
         })
         this.logEvent('SDKFloatingClicked');
+        this.enableExpandTimer('off');
         
         var isChatOpenState = {
             isChatOpen: true,
@@ -471,9 +452,9 @@ class FloatingButton {
     }
 
     hideChat(iframeContainer, button, expandedButton, dimmedBackground) {
-        if (!this.isDestroyed && !this.isMockup && this.floatingCount < 2) {
+        if (!this.isDestroyed && this.floatingCount < 2) {
             // mockup is not the case cause scroll event is applied
-            this.enableExpandTimer();
+            this.enableExpandTimer('on');
         }
         button.className = 'floating-button-common button-image';
         if (expandedButton) expandedButton.className = 'expanded-button hide';
