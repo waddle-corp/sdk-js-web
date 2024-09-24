@@ -183,7 +183,6 @@ class FloatingButton {
                 }
             }, [3000])
             if (this.type !== 'needs') {
-                console.log('update params', this.type);
                 this.enableExpandTimer('on');
             }
         }
@@ -230,7 +229,6 @@ class FloatingButton {
     }
 
     updateParameter(props) {
-        console.log('update parameter func called', props, !this.floatingComment?.message && !this.floatingProduct?.message);
         if (!this.floatingComment?.message && !this.floatingProduct?.message) {
             this.type = props.type;
             this.chatUrl = `${this.hostSrc}/dlst/sdk/${this.userId}?i=${this.itemId}&u=${this.userId}&t=${this.type}&ch=${this.isMobileDevice}&fc=${this.floatingComment[1]}`;
@@ -411,11 +409,9 @@ class FloatingButton {
             this.needsTimer = setTimeout(() => {
                 this.updateParameter({type: 'needs'});
             }, 10000);
-            console.log('on mode enabled');
         }
         else if (mode === 'off') {
             clearTimeout(this.needsTimer);  // 타이머 클리어
-            console.log('off mode enabled');
         }
     }
 
