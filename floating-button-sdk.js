@@ -231,6 +231,7 @@ class FloatingButton {
 
     updateParameter(props) {
         this.commentType = props.type;
+        this.enableExpandTimer('off');
         this.fetchFloatingComment(this.itemId, this.userId, props.type)
             .then(floatingComment => {
                 if (floatingComment[0] !== '존재하지 않는 상품입니다.') {
