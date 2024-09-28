@@ -48,12 +48,14 @@ class FloatingButton {
         this.handleAuth(this.udid, this.authCode)
             .then(userId => {
                 this.userId = userId;
-                this.fetchFloatingComment(this.itemId, this.userId)
+                this.fetchFloatingComment(this.itemId, this.userId, this.type)
                     .then(floatingComment => {
-                        if (floatingComment[0]) {
-                            this.floatingComment = floatingComment;
-                            this.commentType = floatingComment[2];
-                            this.chatUrl = `${this.hostSrc}/dlst/sdk/${this.userId}?i=${this.itemId}&u=${this.userId}&t=${this.type}&ch=${this.isMobileDevice}&fc=${this.floatingComment[0]}`;
+                        console.log('comment', floatingComment[0]);
+                        if (floatingComment[0] !== '존재하지 않는 상품입니다.') {
+                            this.floatingComment = floatingComment[0];
+                            console.log('fc', this.floatingComment)
+                            this.commentType = floatingComment[1];
+                            this.chatUrl = `${this.hostSrc}/dlst/sdk/${this.userId}?i=${this.itemId}&t=${this.type}&ch=${this.isMobileDevice}&fc=${this.floatingComment[0]}`;
                             if (!this.isDestroyed) this.init(this.itemId, this.type, this.chatUrl);
                         } else {
                             // client variable required in chatUrl for the future
@@ -125,7 +127,7 @@ class FloatingButton {
             this.expandedButton.className = 'expanded-button';
             this.expandedText = document.createElement('p');
             this.expandedButton.appendChild(this.expandedText);
-            this.expandedText.innerText = this.floatingComment[type === 'needs' ? 1 : 0] || '...';
+            this.expandedText.innerText = this.floatingComment || '...';
             this.expandedText.className = 'expanded-text';
             document.body.appendChild(this.expandedButton);
             this.floatingCount += 1;
@@ -229,10 +231,20 @@ class FloatingButton {
     }
 
     updateParameter(props) {
-        if (!this.floatingComment?.message && !this.floatingProduct?.message) {
+        if (floatingComment[0] !== '존재하지 않는 상품입니다.') {
             this.type = props.type;
-            this.chatUrl = `${this.hostSrc}/dlst/sdk/${this.userId}?i=${this.itemId}&u=${this.userId}&t=${this.type}&ch=${this.isMobileDevice}&fc=${this.floatingComment[1]}`;
+            this.chatUrl = `${this.hostSrc}/dlst/sdk/${this.userId}?i=${this.itemId}&u=${this.userId}&t=${this.type}&ch=${this.isMobileDevice}&fc=${this.floatingComment[0]}`;
             if (!this.isDestroyed) this.init(this.itemId, this.type, this.chatUrl);
+            // this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
+            //     .then(floatingProduct => {
+            //         if (!floatingProduct?.message) {
+            //             this.replaceAmpersand(floatingProduct);
+            //             this.floatingProduct = floatingProduct;
+            //             // client variable required in chatUrl for the future
+            //             this.chatUrl = `${this.hostSrc}/dlst/sdk/${this.userId}?product=${JSON.stringify(this.floatingProduct)}`;
+            //             this.init(this.itemId, this.type, this.chatUrl);
+            //         }
+            //     })
         }
     }
 
@@ -299,10 +311,10 @@ class FloatingButton {
         }
     }
 
-    async fetchFloatingComment(itemId, userId) {
+    async fetchFloatingComment(itemId, userId, type) {
         try {
             // URL에 itemId를 포함시켜 GET 요청 보내기
-            const url = `${this.domains.recommend}?itemId=${itemId}&userId=${userId}`;
+            const url = `${this.domains.recommend}?itemId=${itemId}&userId=${userId}&commentType=${type}`;
             
             const response = await fetch(url, {
                 method: "GET",
@@ -310,7 +322,7 @@ class FloatingButton {
             });
     
             const res = await response.json(); // JSON 형태의 응답 데이터 파싱
-            return [res.this, res.needs, res.case];
+            return [res.message, res.case];
         } catch (error) {
             console.error(`Error while calling fetchFloatingComment API: ${error}`);
         }
