@@ -53,9 +53,8 @@ class FloatingButton {
                         console.log('comment', floatingComment[0]);
                         if (floatingComment[0] !== '존재하지 않는 상품입니다.') {
                             this.floatingComment = floatingComment[0];
-                            console.log('fc', this.floatingComment)
                             this.commentType = floatingComment[1];
-                            this.chatUrl = `${this.hostSrc}/dlst/sdk/${this.userId}?i=${this.itemId}&t=${this.type}&ch=${this.isMobileDevice}&fc=${this.floatingComment[0]}`;
+                            this.chatUrl = `${this.hostSrc}/dlst/sdk/${this.userId}?i=${this.itemId}&t=${this.type}&ch=${this.isMobileDevice}&fc=${this.floatingComment}`;
                             if (!this.isDestroyed) this.init(this.itemId, this.type, this.chatUrl);
                         } else {
                             // client variable required in chatUrl for the future
@@ -231,9 +230,9 @@ class FloatingButton {
     }
 
     updateParameter(props) {
-        if (floatingComment[0] !== '존재하지 않는 상품입니다.') {
+        if (this.floatingComment !== '존재하지 않는 상품입니다.') {
             this.type = props.type;
-            this.chatUrl = `${this.hostSrc}/dlst/sdk/${this.userId}?i=${this.itemId}&u=${this.userId}&t=${this.type}&ch=${this.isMobileDevice}&fc=${this.floatingComment[0]}`;
+            this.chatUrl = `${this.hostSrc}/dlst/sdk/${this.userId}?i=${this.itemId}&u=${this.userId}&t=${this.type}&ch=${this.isMobileDevice}&fc=${this.floatingComment}`;
             if (!this.isDestroyed) this.init(this.itemId, this.type, this.chatUrl);
             // this.fetchFloatingProduct(this.itemId, this.userId, this.type, this.isMobileDevice)
             //     .then(floatingProduct => {
