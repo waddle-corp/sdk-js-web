@@ -26,7 +26,7 @@ class FloatingButton {
             this.hostSrc = 'https://demo.gentooai.com';
             this.domains = {
                 auth: 'https://byg7k8r4gi.execute-api.ap-northeast-2.amazonaws.com/prod/auth',
-                recommend: 'https://byg7k8r4gi.execute-api.ap-northeast-2.amazonaws.com/prod/recommend',
+                recommend: 'https://byg7k8r4gi.execute-api.ap-northeast-2.amazonaws.com/prod/dlst/recommend',
                 log: 'https://byg7k8r4gi.execute-api.ap-northeast-2.amazonaws.com/prod/userEvent',
             }
             this.keys = {
@@ -37,7 +37,7 @@ class FloatingButton {
             // this.hostSrc = 'https://accio-webclient-git-feat-gent-670-waddle.vercel.app';
             this.domains = {
                 auth: 'https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/auth',
-                recommend: 'https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/recommend',
+                recommend: 'https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/dlst/recommend',
                 log: 'https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/userEvent',
             }
             this.keys = {
@@ -230,6 +230,7 @@ class FloatingButton {
     }
 
     updateParameter(props) {
+        this.commentType = props.type;
         this.fetchFloatingComment(this.itemId, this.userId, props.type)
             .then(floatingComment => {
                 if (floatingComment[0] !== '존재하지 않는 상품입니다.') {
