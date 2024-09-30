@@ -183,7 +183,7 @@ class FloatingButton {
                     this.button.className = 'floating-button-common button-image';
                 }
             }, [3000])
-            if (this.type !== 'needs') {
+            if (this.type !== 'needs' && this.floatingComment.length < 1) {
                 this.enableExpandTimer('on');
             }
         }
