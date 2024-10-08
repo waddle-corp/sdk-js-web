@@ -22,7 +22,17 @@ class FloatingButton {
             this.updateParameter({type: 'needs'});
         }, 10000);
         
-        if (window.location.hostname === 'dailyshot.co' || window.location.hostname === 'demo.gentooai.com') {
+        if (window.location.hostname === 'localhost') {
+            this.hostSrc = 'http://localhost:3000';
+            this.domains = {
+                auth: 'https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/auth',
+                recommend: 'https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/dlst/recommend',
+                log: 'https://hg5eey52l4.execute-api.ap-northeast-2.amazonaws.com/dev/userEvent',
+            }
+            this.keys = {
+                log: 'G4J2wPnd643wRoQiK52PO9ZAtaD6YNCAhGlfm1Oc',
+            }
+        } else if (window.location.hostname === 'dailyshot.co' || window.location.hostname === 'demo.gentooai.com') {
             this.hostSrc = 'https://demo.gentooai.com';
             this.domains = {
                 auth: 'https://byg7k8r4gi.execute-api.ap-northeast-2.amazonaws.com/prod/auth',
