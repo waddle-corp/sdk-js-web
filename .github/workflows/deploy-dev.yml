@@ -1,9 +1,9 @@
-name: Deploy to S3
+name: Deploy to S3 Develop
 
 on:
   push:
     branches:
-      - main  # main 브랜치에 push가 발생할 때마다 실행
+      - develop
 
 jobs:
   deploy:
